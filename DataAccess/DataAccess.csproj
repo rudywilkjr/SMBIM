@@ -72,6 +72,7 @@
     <Compile Include="DTO\ProductDto.cs" />
     <Compile Include="DTO\ProductLocationDto.cs" />
     <Compile Include="DTO\SupplierDto.cs" />
+    <Compile Include="DTO\SupplierTypeDto.cs" />
     <Compile Include="DTO\TransferDto.cs" />
     <Compile Include="Models\Direction.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
@@ -97,6 +98,9 @@
     <Compile Include="Models\ProductLocation.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductSupplier.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\StoreModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -113,6 +117,9 @@
       <DependentUpon>StoreModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Supplier.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SupplierType.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Transfer.cs">

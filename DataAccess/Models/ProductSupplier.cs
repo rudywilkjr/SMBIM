@@ -12,15 +12,14 @@ namespace DataAccess.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class InvoiceProduct
+    public partial class ProductSupplier
     {
         public int Id { get; set; }
-        public int InvoiceId { get; set; }
         public int ProductId { get; set; }
-        public decimal Cost { get; set; }
-        public short Quantity { get; set; }
+        public short SupplierId { get; set; }
+        public bool IsActive { get; set; }
     
-        public virtual Invoice Invoice { get; set; }
         public virtual Product Product { get; set; }
+        public virtual Supplier Supplier { get; set; }
     }
 }

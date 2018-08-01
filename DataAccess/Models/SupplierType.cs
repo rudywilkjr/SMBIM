@@ -12,20 +12,18 @@ namespace DataAccess.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Invoice
+    public partial class SupplierType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Invoice()
+        public SupplierType()
         {
-            this.InvoiceProducts = new HashSet<InvoiceProduct>();
+            this.Suppliers = new HashSet<Supplier>();
         }
     
-        public int Id { get; set; }
-        public short SupplierId { get; set; }
-        public System.DateTime CreationDate { get; set; }
+        public short Id { get; set; }
+        public string Description { get; set; }
     
-        public virtual Supplier Supplier { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvoiceProduct> InvoiceProducts { get; set; }
+        public virtual ICollection<Supplier> Suppliers { get; set; }
     }
 }

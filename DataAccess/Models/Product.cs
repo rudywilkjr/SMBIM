@@ -20,6 +20,7 @@ namespace DataAccess.Models
             this.InvoiceProducts = new HashSet<InvoiceProduct>();
             this.Transfers = new HashSet<Transfer>();
             this.ProductLocations = new HashSet<ProductLocation>();
+            this.ProductSuppliers = new HashSet<ProductSupplier>();
         }
     
         public int Id { get; set; }
@@ -33,5 +34,7 @@ namespace DataAccess.Models
         public virtual ICollection<Transfer> Transfers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductLocation> ProductLocations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductSupplier> ProductSuppliers { get; set; }
     }
 }

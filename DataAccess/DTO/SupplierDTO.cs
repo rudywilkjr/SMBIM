@@ -11,5 +11,8 @@ namespace DataAccess.DTO
         public short Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public short SupplierTypeId { get; set; }
+
+        public virtual SupplierTypeDto SupplierType { get; set; }
     }
 }

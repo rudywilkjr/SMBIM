@@ -5,16 +5,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3ad0a2aafcee410f91accbd88bcfa0f4" Name="Diagram1">
-        <EntityTypeShape EntityType="StoreModel.Direction" Width="1.5" PointX="3.75" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.DirectionType" Width="1.5" PointX="6" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.Invoice" Width="1.5" PointX="0.75" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.InvoiceProduct" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Direction" Width="1.5" PointX="10.875" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.DirectionType" Width="1.5" PointX="10.875" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Invoice" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.InvoiceProduct" Width="1.5" PointX="3" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="StoreModel.Location" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.LocationType" Width="1.5" PointX="1.5" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.LocationType" Width="1.5" PointX="3.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="StoreModel.Product" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.ProductLocation" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.Supplier" Width="1.5" PointX="1.5" PointY="15" IsExpanded="true" />
-        <EntityTypeShape EntityType="StoreModel.Transfer" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.ProductLocation" Width="1.5" PointX="4.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Supplier" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Transfer" Width="1.5" PointX="7.375" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="StoreModel.FK__Transfer__Direct__1FCDBCEB" ManuallyRouted="false" />
         <AssociationConnector Association="StoreModel.FK_Direction_DirectionType" ManuallyRouted="false" />
         <AssociationConnector Association="StoreModel.FK_Invoice_Supplier" ManuallyRouted="false" />
@@ -25,6 +25,11 @@
         <AssociationConnector Association="StoreModel.FK_Location_InventoryLocation" ManuallyRouted="false" />
         <AssociationConnector Association="StoreModel.FK__Transfer__Invent__4BAC3F29" ManuallyRouted="false" />
         <AssociationConnector Association="StoreModel.FK_Product_InventoryLocation" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="StoreModel.ProductSupplier" Width="1.5" PointX="10.5" PointY="7.875" />
+        <EntityTypeShape EntityType="StoreModel.SupplierType" Width="1.5" PointX="3" PointY="11" />
+        <AssociationConnector Association="StoreModel.FK_ProductSupplier_Product" />
+        <AssociationConnector Association="StoreModel.FK_ProductSupplier_Supplier" />
+        <AssociationConnector Association="StoreModel.FK_Supplier_SupplierType" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

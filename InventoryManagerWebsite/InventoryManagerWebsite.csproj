@@ -156,6 +156,7 @@
     <Compile Include="Models\Report\Transfer.cs" />
     <Compile Include="Models\Transfer\Move.cs" />
     <Compile Include="Models\Transfer\Receive.cs" />
+    <Compile Include="Models\Transfer\ReceiveSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -18,13 +18,18 @@ namespace DataAccess.Models
         public Supplier()
         {
             this.Invoices = new HashSet<Invoice>();
+            this.ProductSuppliers = new HashSet<ProductSupplier>();
         }
     
         public short Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public short SupplierTypeId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Invoice> Invoices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductSupplier> ProductSuppliers { get; set; }
+        public virtual SupplierType SupplierType { get; set; }
     }
 }

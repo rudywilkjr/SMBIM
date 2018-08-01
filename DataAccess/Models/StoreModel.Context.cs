@@ -35,5 +35,7 @@ namespace DataAccess.Models
         public virtual DbSet<ProductLocation> ProductLocations { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
+        public virtual DbSet<ProductSupplier> ProductSuppliers { get; set; }
+        public virtual DbSet<SupplierType> SupplierTypes { get; set; }
     }
 }
