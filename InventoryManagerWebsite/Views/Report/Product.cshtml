@@ -1,0 +1,39 @@
+﻿@using AspNet.Mvc.Grid
+@model InventoryManagerWebsite.Models.Report.ProductReportModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" style="text-align: center; width: 800px">
+    <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px">
+        Reports - Product
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <form id="report-inventory-form">
+            <div class="col-sm-5">
+                @Html.DropDownListFor(x => x.SelectedProductId, Model.ProductsList, new Dictionary<string, object> { { "class", "form-control" } })
+            </div>
+            <div class="col-sm-5">
+                @Html.DropDownListFor(x => x.SelectedLocationId, Model.LocationsList, new Dictionary<string, object> { { "class", "form-control" } })
+            </div>
+            <div class="col-sm-2">
+                <button id="Search" class="btn btn-primary" onclick="SearchProductReport()">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="row" style="width: 800px">
+        <hr style="width: 100%"/>
+        @Html.Grid(Model.Items).Columns(cb =>
+        {
+            cb.For(p => p.ProductId).Named("ID").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.ProductName).Named("Product").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.LocationDescription).Named("Location").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.QuantityOnHand).Named("Quantity").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+        }).Attributes(@class => "table table-hover")
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/Report/product.js"></script>    
+}

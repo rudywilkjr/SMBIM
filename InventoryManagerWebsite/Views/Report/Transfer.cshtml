@@ -1,0 +1,43 @@
+﻿@using AspNet.Mvc.Grid
+@model InventoryManagerWebsite.Models.Report.TransferReportModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" style="text-align: center; width: 800px">
+    <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px">
+        Reports - Transfers
+    </div>
+    <div class="row" style="margin-bottom: 10px">
+        <form id="report-transfer-form">
+            <div class="col-sm-5">
+                @Html.LabelFor(x => x.SelectedBeginDate, "Begin Date")
+                <input id="SelectedBeginDate" type="text" name="SelectedBeginDate" value="@(Model.SelectedBeginDate.HasValue && Model.SelectedBeginDate.Value != DateTime.MinValue ? Model.SelectedBeginDate.Value.ToShortDateString() : "")"/>
+            </div>
+            <div class="col-sm-5">
+                @Html.LabelFor(x => x.SelectedEndDate, "End Date")
+                <input id="SelectedEndDate" type="text" name="SelectedEndDate" value="@(Model.SelectedEndDate.HasValue && Model.SelectedEndDate.Value != DateTime.MinValue ? Model.SelectedEndDate.Value.ToShortDateString() : "")" />
+            </div>
+            <div class="col-sm-2">
+                <button id="Search" class="btn btn-primary" onclick="SearchTransferReport()">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="row" style="width: 800px">
+        <hr style="width: 100%"/>
+        @Html.Grid(Model.Items).Columns(cb =>
+        {
+            cb.For(p => p.ActivityTime).Named("Time").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.Location.Description).Named("Location").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.Direction.Description).Named("Direction").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.Product.Name).Named("Product").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.OriginalQuantity).Named("Original Quantity").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+            cb.For(p => p.NewQuantity).Named("New Quantity").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
+        }).Attributes(@class => "table table-hover").Sort(new GridSortOptions {Column = "Time"})
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/Report/transfer.js"></script>
+}

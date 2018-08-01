@@ -1,0 +1,81 @@
+﻿@model InventoryManagerWebsite.Models.Transfer.ReceiveModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="width: 800px; text-align: center">
+    <form id="transfer-receive-form">
+        @Html.HiddenFor(x => x.SelectedProductId)
+        @Html.HiddenFor(x => x.SelectedDestinationLocationId)
+        <div class="row" style="font-size: x-large; font-weight: bold">
+            Receiving
+        </div>
+        @if (Model.TransferComplete.GetValueOrDefault())
+        {
+            <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px; background-color: lightgreen; margin-top: 25px;">
+                Transfer Completed Successfully
+            </div>
+        }
+        <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px">
+            @Html.ValidationSummary()
+        </div>
+        <div class="row" style="margin-top: 15px">
+            <div class="col-sm-12" style="text-align: center">
+                @Html.LabelFor(x => x.SelectedSourceLocationId, "Receive From")
+                @Html.DropDownListFor(x => x.SelectedSourceLocationId, new SelectList(Model.SourceLocations.OrderBy(x => x.Description),"Id","Description"))
+            </div>
+        </div>
+        <div class="row" style="margin-top: 15px">
+            <div class="col-sm-4" style="text-align: right">
+                <table id="sourceTable" class="table">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">Products</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var i in Model.Products)
+                    {
+                        <tr class="@(Model.SelectedProductId == i.Id ? "selected-row" : "highlightable-row")" onclick="selectSourceLocation(this, @i.Id)">
+                            <td style="text-align: left">@i.Name</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4" style="text-align: center">
+                <div class="row">
+                    @Html.LabelFor(x => x.SelectedQuantity, "Qty:")
+                    @Html.TextBoxFor(x => x.SelectedQuantity, new Dictionary<string, object> {{"style", "width:50px;margin-bottom: 20px"}, {"onchange", "toggleTransferButtonState()" } })
+                </div>
+                <div class="row">
+                    <button id="Transfer" type="button" class="btn btn-primary disabled" style="margin-bottom: 20px" onclick="receiveInventory()">Transfer To</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <table id="destinationTable" class="table">
+                    <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: center">Destination</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var i in Model.DestinationLocations)
+                    {
+                        <tr class="@(Model.SelectedDestinationLocationId == i.Id ? "selected-row" : "highlightable-row")" onclick="selectDestinationLocation(this, @i.Id)">
+                            <td style="text-align: center">@i.Description</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/Transfer/receive.js"></script>
+}

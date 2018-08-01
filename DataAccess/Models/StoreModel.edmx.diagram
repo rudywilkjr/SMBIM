@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3ad0a2aafcee410f91accbd88bcfa0f4" Name="Diagram1">
+        <EntityTypeShape EntityType="StoreModel.Direction" Width="1.5" PointX="3.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.DirectionType" Width="1.5" PointX="6" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Invoice" Width="1.5" PointX="0.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.InvoiceProduct" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Location" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.LocationType" Width="1.5" PointX="1.5" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Product" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.ProductLocation" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Supplier" Width="1.5" PointX="1.5" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="StoreModel.Transfer" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <AssociationConnector Association="StoreModel.FK__Transfer__Direct__1FCDBCEB" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK_Direction_DirectionType" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK_Invoice_Supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK_InvoiceProduct_Invoice" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK_InvoiceProduct_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK__Location__Type__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK__Transfer__Locati__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK_Location_InventoryLocation" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK__Transfer__Invent__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="StoreModel.FK_Product_InventoryLocation" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

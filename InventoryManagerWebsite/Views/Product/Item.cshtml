@@ -1,0 +1,110 @@
+﻿@model InventoryManagerWebsite.Models.Product.ProductModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="width: 500px; text-align: center">
+    <form id="inventory-item-form">
+        @Html.HiddenFor(x => x.ProductItem.Id)
+        <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px">
+            Inventory Management
+        </div>
+        @if (Model.ProductItem.Id == 0)
+        {
+            <div class="row" style="font-size: large; font-weight: bold; margin-bottom: 25px">
+                Create New Product
+            </div>
+        }
+        @if (Model.SaveSuccessful.GetValueOrDefault())
+        {
+            <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px; background-color: lightgreen; margin-top: 25px;">
+                Product Updated Successfully
+            </div>
+        }
+        <div class="row">
+            <div class="col-sm-12 form-group" style="text-align: center">
+                @Html.LabelFor(x => x.ProductItem.Name)
+                @Html.TextBoxFor(x => x.ProductItem.Name, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group" style="text-align: center">
+                @Html.LabelFor(x => x.ProductItem.Barcode)
+                @Html.TextBoxFor(x => x.ProductItem.Barcode, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group" style="text-align: center">
+                @Html.LabelFor(x => x.ProductItem.Weight)
+                @Html.TextBoxFor(x => x.ProductItem.Weight, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" style="width: 50%">
+                <button id="Cancel" type="button" class="btn btn-info" onclick="CancelProductItem()">Go Back</button>
+            </div>
+            <div class="col-sm-6" style="width: 50%">
+                <button id="Save" type="button" class="btn btn-primary" onclick="SaveProductItem()">Update</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<hr style="width: 100%" />
+@if (Model.Locations != null && Model.Locations.Any())
+{
+    <div style="text-align: center; margin-top: 25px; font-size: large">
+        <div style="font-weight: bold; margin-bottom: 25px" >
+            Item Locations
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="text-align: center">Location</th>
+                <th style="text-align: center">On Hand</th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var l in Model.Locations)
+            {
+                <tr class="highlightable-row">
+                    <td>@l.LocationDescription</td>
+                    <td>@l.QuantityOnHand</td>
+                    <td><button id="Move" type="button" class="btn btn-link" onclick="Move(@l.ProductId, @l.LocationId)">Move</button></td>
+                    <td><button id="Ship" type="button" class="btn btn-link" onclick="Ship(@l.ProductId, @l.LocationId)">Ship</button></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div style="text-align: center; margin-top: 25px; font-size: large">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align: center">Location</th>
+                    <th style="text-align: center">On Hand</th>
+                    <th style="text-align: center"></th>
+                    <th style="text-align: center"></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>No locations found with this product.</td>
+                <td colspan="3"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts
+{
+    <script src="~/Scripts/Product/item.js"></script>
+}

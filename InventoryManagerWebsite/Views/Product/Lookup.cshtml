@@ -1,0 +1,59 @@
+﻿@model InventoryManagerWebsite.Models.Product.ProductLookupModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="inventory-lookup-view">
+    <div class="container" style="width: 500px; text-align: center">
+        <div class="row" style="font-size: x-large; font-weight: bold">
+            Product - Item Lookup
+        </div>
+        <form id="inventory-lookup-form">
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-12 form-group" style="text-align: center">
+                        @Html.LabelFor(x => x.SearchText, "Search")
+                        @Html.TextBoxFor(x => x.SearchText, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6" style="width: 50%">
+                    <button id="CreateNew" type="button" class="btn success" onclick="CreateNewItem()">Create New Product</button>
+                </div>
+                <div class="col-sm-6" style="width: 50%">
+                    <button id="Search" type="button" class="btn btn-primary" onclick="SearchProduct()">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    @if (Model.ProductItems != null && Model.ProductItems.Any())
+    {
+        <div style="text-align: center; margin-top: 25px">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="text-align: center">Product ID</th>
+                    <th style="text-align: center">Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var l in Model.ProductItems)
+                {
+                    <tr class="highlightable-row" onclick="SelectProduct(@(l.Id));">
+                        <td>@l.Id</td>
+                        <td>@l.Name</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/Product/lookup.js"></script>
+}
+    
