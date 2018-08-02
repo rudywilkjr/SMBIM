@@ -60,7 +60,7 @@ textarea {
     position: absolute;
     top: -10px;
     left: 20px;
-    background-color: white;
+    background-color: transparent;
     max-width: none;
 }
 
