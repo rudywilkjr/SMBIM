@@ -36,7 +36,8 @@
           <Property Name="InvoiceId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="Quantity" Type="smallint" Nullable="false" />
+          <Property Name="OrderedQuantity" Type="smallint" Nullable="false" />
+          <Property Name="ReceivedQuantity" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -373,7 +374,8 @@
           <Property Name="Cost" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <NavigationProperty Name="Invoice" Relationship="Self.FK_InvoiceProduct_Invoice" FromRole="InvoiceProduct" ToRole="Invoice" />
           <NavigationProperty Name="Product" Relationship="Self.FK_InvoiceProduct_Product" FromRole="InvoiceProduct" ToRole="Product" />
-          <Property Name="Quantity" Type="Int16" Nullable="false" />
+          <Property Name="OrderedQuantity" Type="Int16" Nullable="false" />
+          <Property Name="ReceivedQuantity" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -722,7 +724,8 @@
           <EntitySetMapping Name="InvoiceProducts">
             <EntityTypeMapping TypeName="StoreModel.InvoiceProduct">
               <MappingFragment StoreEntitySet="InvoiceProduct">
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ReceivedQuantity" ColumnName="ReceivedQuantity" />
+                <ScalarProperty Name="OrderedQuantity" ColumnName="OrderedQuantity" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />

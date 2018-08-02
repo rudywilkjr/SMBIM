@@ -19,6 +19,8 @@ namespace DataAccess.Models
         public int ProductId { get; set; }
         public decimal Cost { get; set; }
         public short Quantity { get; set; }
+        public short OrderedQuantity { get; set; }
+        public short ReceivedQuantity { get; set; }
     
         public virtual Invoice Invoice { get; set; }
         public virtual Product Product { get; set; }

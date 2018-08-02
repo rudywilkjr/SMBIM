@@ -14,6 +14,10 @@ namespace InventoryManagerWebsite
             Mapper.CreateMap<Transfer, TransferDto>();
             Mapper.CreateMap<Direction, DirectionDto>();
             Mapper.CreateMap<LocationType, LocationTypeDto>();
+            Mapper.CreateMap<Invoice, InvoiceDto>();
+            Mapper.CreateMap<InvoiceProduct, InvoiceProductDto>();
+            Mapper.CreateMap<Supplier, SupplierDto>();
+            Mapper.CreateMap<SupplierType, SupplierTypeDto>();
 #pragma warning restore 618
         }
 

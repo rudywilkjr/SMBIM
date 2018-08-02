@@ -6,12 +6,12 @@ using System.Web;
 
 namespace InventoryManagerWebsite.Models.Transfer
 {
-    public class ReceiveSearch
+    public class InvoiceSearchModel
     {
-        public string SearchText { get; set; }
+        public string InvoiceSearchText { get; set; }
 
         public List<InvoiceDto> Invoices { get; set; }
 
-
+        public string SelectedInvoiceId { get; set; }
     }
 }

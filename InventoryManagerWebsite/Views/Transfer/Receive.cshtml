@@ -1,20 +1,6 @@
-﻿@model InventoryManagerWebsite.Models.Transfer.ReceiveModel
-
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<div class="container" style="width: 800px; text-align: center">
-    <form id="transfer-receive-form">
-        @Html.HiddenFor(x => x.SelectedProductId)
-        @Html.HiddenFor(x => x.SelectedDestinationLocationId)
-        <div class="row" style="font-size: x-large; font-weight: bold">
-            Receiving
-        </div>
-
-    </form>
-
-</div>
 
 @section Scripts
 {

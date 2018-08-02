@@ -156,7 +156,7 @@
     <Compile Include="Models\Report\Transfer.cs" />
     <Compile Include="Models\Transfer\Move.cs" />
     <Compile Include="Models\Transfer\Receive.cs" />
-    <Compile Include="Models\Transfer\ReceiveSearch.cs" />
+    <Compile Include="Models\Transfer\InvoiceSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +242,7 @@
     <Content Include="Views\Report\Product.cshtml" />
     <Content Include="Views\Report\Transfer.cshtml" />
     <Content Include="Views\Transfer\Index.cshtml" />
+    <Content Include="Views\Transfer\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

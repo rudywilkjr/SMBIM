@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using InventoryManagerService.Inventory;
+using InventoryManagerService.Invoice;
 using InventoryManagerService.Location;
 using InventoryManagerService.Transfer;
 using InventoryManagerWebsite.Models.Transfer;
@@ -14,6 +15,7 @@ namespace InventoryManagerWebsite.Controllers
         private readonly ProductService _inventoryService = new ProductService();
         private readonly LocationService _locationService = new LocationService();
         private readonly TransferService _transferService = new TransferService();
+        private readonly InvoiceService _invoiceService = new InvoiceService();
 
         [Route("Move/{locationId=locationId}/{inventoryItemId=inventoryItemId}")]
         public ActionResult Move(int inventoryItemId, int locationId)
@@ -50,10 +52,12 @@ namespace InventoryManagerWebsite.Controllers
             return View("Move", model);
         }
 
-
-        public ActionResult Index()
+        [Route("Search")]
+        public ActionResult Search(InvoiceSearchModel model)
         {
-            return View("Index");
+            model.Invoices = _invoiceService.GetInvoices(model.InvoiceSearchText);
+            
+            return View("Search", model);
         }
 
         [Route("Receive")]
