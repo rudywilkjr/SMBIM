@@ -52,11 +52,11 @@ namespace InventoryManagerWebsite.Controllers
         }
 
         [Route("Lookup")]
-        public ActionResult Lookup(string searchText)
+        public ActionResult Lookup(ProductLookupModel searchModel)
         {
             var searchedProductsModel = new ProductLookupModel
             {
-                ProductItems = _productService.GetProductItems(searchText)
+                ProductItems = _productService.GetProductItems(searchModel.SearchText)
             };
             
 

@@ -10,6 +10,20 @@ namespace DataAccess.Repositories
 {
     public class InvoiceRepository
     {
+        public InvoiceDto GetInvoice(int invoiceId)
+        {
+            Invoice invoice;
+            using (var ctx = new StoreEntities())
+            {
+                invoice = ctx.Invoices
+                    .Include("InvoiceProducts.Product")
+                    .Include("Supplier.SupplierType")
+                    .Where(x => x.Id.Equals(invoiceId)).SingleOrDefault();
+            }
+
+            return AutoMapper.Mapper.Map<InvoiceDto>(invoice);
+        }
+
         public List<InvoiceDto> GetInvoices(string searchText)
         {
             List<Invoice> invoiceItems;

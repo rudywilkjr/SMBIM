@@ -4,41 +4,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="inventory-lookup-view">
-    <div class="container" style="width: 500px; text-align: center">
+@using (Html.BeginForm("Lookup", "Product", FormMethod.Post))
+{
+    <div class="container" style="text-align: center">
         <div class="row" style="font-size: x-large; font-weight: bold">
-            Product - Item Lookup
+            <div class="col-sm-12" style="padding-bottom: 20px;">
+                Product - Item Lookup
+            </div>
         </div>
-        <form id="inventory-lookup-form">
-            <div class="row">
-                <div class="row">
-                    <div class="col-sm-12 form-group" style="text-align: center">
-                        @Html.LabelFor(x => x.SearchText, "Search")
-                        @Html.TextBoxFor(x => x.SearchText, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+        <div class="row">
+            <div class="col-sm-12" style="text-align: center">
+                <div class="input-group">
+                    @Html.TextBoxFor(x => x.SearchText, new Dictionary<string, object> { { "placeholder", "Enter your search term" }, { "class", "form-control input-lg" } })
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">Search</button>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6" style="width: 50%">
-                    <button id="CreateNew" type="button" class="btn success" onclick="CreateNewItem()">Create New Product</button>
-                </div>
-                <div class="col-sm-6" style="width: 50%">
-                    <button id="Search" type="button" class="btn btn-primary" onclick="SearchProduct()">Search</button>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
-    @if (Model.ProductItems != null && Model.ProductItems.Any())
-    {
-        <div style="text-align: center; margin-top: 25px">
-            <table class="table">
-                <thead>
+}
+
+@if (Model.ProductItems != null && Model.ProductItems.Any())
+{
+    <div style="text-align: center; margin-top: 25px">
+        <table class="table center table-striped" >
+            <thead>
                 <tr>
                     <th style="text-align: center">Product ID</th>
                     <th style="text-align: center">Name</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach (var l in Model.ProductItems)
                 {
                     <tr class="highlightable-row" onclick="SelectProduct(@(l.Id));">
@@ -46,14 +43,13 @@
                         <td>@l.Name</td>
                     </tr>
                 }
-                </tbody>
-            </table>
-        </div>
-    }
-</div>
+            </tbody>
+        </table>
+    </div>
+}
 
 @section Scripts
 {
     <script src="~/Scripts/Product/lookup.js"></script>
 }
-    
+

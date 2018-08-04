@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace InventoryManagerWebsite.Models.Transfer
+namespace InventoryManagerWebsite.Models.Invoice
 {
-    public class InvoiceSearchModel
+    public class InvoiceSearchViewModel
     {
         public string InvoiceSearchText { get; set; }
 

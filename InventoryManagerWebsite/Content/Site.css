@@ -1,5 +1,4 @@
 ﻿body {
-    padding-top: 50px;
     padding-bottom: 20px;
 }
 
@@ -14,13 +13,6 @@
 */
 .dl-horizontal dt {
     white-space: normal;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
 }
 
 .validation-summary-errors {
@@ -58,13 +50,31 @@ textarea {
 
 .form-group > label {
     position: absolute;
-    top: -10px;
+    top: -14px;
     left: 20px;
-    background-color: transparent;
+    margin-bottom: -5px;
+    height: 20px;
+    background-color: white;
     max-width: none;
+    font-weight: bold;
 }
 
 .form-group > input {
     border: none;
     max-width: none;
+}
+
+.form-control, .input-lg {
+    height: 45px;
+}
+
+.table, .center {
+    width: 75%;
+    margin: auto;
+}
+
+.subtitle {
+    font-size: x-large;
+    font-weight: bold;
+    padding-bottom: 20px;
 }

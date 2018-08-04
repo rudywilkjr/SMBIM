@@ -28,9 +28,17 @@ namespace InventoryManagerService.Transfer
             return _transferRepository.GetTransfers(beginDate, endDate);
         }
 
-        public bool TransferOut(int inventoryId, int leavingLocationId, int arrivingLocationId, int quantity)
+        public void TransferOutProducts(List<InvoiceProductDto> products, int leavingLocationId, int arrivingLocationId, int quantity)
         {
-            var productItem = _inventoryRepository.GetProduct(inventoryId);
+            foreach (var product in products)
+            {
+                TransferOut(product.Id, leavingLocationId, arrivingLocationId, quantity);
+            }
+        }
+
+        public void TransferOut(int productId, int leavingLocationId, int arrivingLocationId, int quantity)
+        {
+            var productItem = _inventoryRepository.GetProduct(productId);
             var originalLocationItem = _locationRepository.GetLocation(leavingLocationId);
             var newLocationItem = _locationRepository.GetLocation(arrivingLocationId);
             LocationsWithProductDto inventoryAtSourceLocation;
@@ -40,14 +48,14 @@ namespace InventoryManagerService.Transfer
                 if (originalLocationItem.LocationType.Description == "Internal")
                 {
                     inventoryAtSourceLocation =
-                        _inventoryRepository.GetInternalLocationsWithProduct(inventoryId, leavingLocationId).Single();
+                        _inventoryRepository.GetInternalLocationsWithProduct(productId, leavingLocationId).Single();
                 }
                 else
                 {
                     inventoryAtSourceLocation = new LocationsWithProductDto
                     {
-                        ProductId = inventoryId,
-                        ProductName = _inventoryRepository.GetProduct(inventoryId).Name,
+                        ProductId = productId,
+                        ProductName = _inventoryRepository.GetProduct(productId).Name,
                         LocationDescription = originalLocationItem.Description,
                         LocationId = originalLocationItem.Id,
                         QuantityOnHand = null
@@ -71,7 +79,7 @@ namespace InventoryManagerService.Transfer
             try
             {
                 inventoryAtDestinationLocation =
-                    _inventoryRepository.GetInternalAndExternalLocationsWithProduct(inventoryId, arrivingLocationId).Single();
+                    _inventoryRepository.GetInternalAndExternalLocationsWithProduct(productId, arrivingLocationId).Single();
             }
             catch (InvalidOperationException)
             {
@@ -162,7 +170,7 @@ namespace InventoryManagerService.Transfer
                 }
                 throw new ApplicationException("Transfer reverted. Please validate and try again.");
             }
-            return true;
+
         }
     }
 }

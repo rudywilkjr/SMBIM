@@ -23,5 +23,10 @@ namespace InventoryManagerService.Invoice
             }
             
         }
+
+        public InvoiceDto GetInvoice(int invoiceId)
+        {
+            return _invoiceRepository.GetInvoice(invoiceId);
+        }
     }
 }

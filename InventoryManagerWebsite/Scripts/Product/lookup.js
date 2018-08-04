@@ -1,16 +1,4 @@
-﻿function SearchProduct() {
-    $.ajax({
-        url: "Product/Lookup",
-        type: "POST",
-        dataType: 'html',
-        data: $("#inventory-lookup-form").serialize(),
-        success: function (html) {
-            $('#inventory-lookup-view').html(html);
-        }
-    });
-}
-
-function SelectProduct(id)
+﻿function SelectProduct(id)
 {
     window.open("/Product/Item/" + id, "_self");
 }

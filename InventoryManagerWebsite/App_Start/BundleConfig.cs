@@ -23,13 +23,16 @@ namespace InventoryManagerWebsite
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap.bundle.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/bootstrap-grid.css",
+                      "~/Content/bootstrap-reboot.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/themes/base/*.css"));
+                      "~/Content/themes/base/*.css",
+                      "~/semantic/packaged/css/semantic.min.css"));
         }
     }
 }

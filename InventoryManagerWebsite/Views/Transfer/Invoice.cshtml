@@ -1,0 +1,89 @@
+﻿@using AspNet.Mvc.Grid
+@model InventoryManagerWebsite.Models.Invoice.ReceiveInvoiceViewModel
+
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="text-align: center">
+    @using (Html.BeginForm("Receive", "Transfer", FormMethod.Post))
+    {
+        @Html.HiddenFor(x => x.SelectedInvoice.Id)
+        <div class="row" style="font-size: x-large; font-weight: bold">
+            <div class="col-sm-12 subtitle">
+                Receive Invoice
+            </div>
+        </div>
+        <div class="row">
+            <table class="table center table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">
+                            Invoice ID
+                        </th>
+                        <th scope="col">
+                            Invoice Type
+                        </th>
+                        <th scope="col">
+                            Invoice Created
+                        </th>
+                        <th scope="col">
+                            Invoice Total Items
+                        </th>
+                        <th scope="col">
+                            Invoice Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.SelectedInvoice.Id</td>
+                        <td>@Model.SelectedInvoice.InvoiceType</td>
+                        <td>@Model.SelectedInvoice.CreationDate.ToShortDateString()</td>
+                        <td>@Model.SelectedInvoice.TotalItems</td>
+                        <td>@Model.SelectedInvoice.Status</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row" style="padding-top:40px; padding-bottom:20px; margin-left:40px; margin-right:40px;">
+            <div class="col-sm-6">
+                @Html.DropDownListFor(x => x.SelectedLocationId, Model.LocationsList, "Select Location", new { @class = "form-control", style = "width: auto; display: inline" })
+            </div>
+            <div class="col-sm-6">
+                <input type="submit" class="btn btn-success" style="text-align: right" />
+            </div>
+        </div>
+        <div class="row">
+            <table class="table center table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col"># Items</th>
+                        <th scope="col">Received</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.SelectedInvoice.InvoiceProducts.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).Product.Name</td>
+                            <td>@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).OrderedQuantity</td>
+                            <td>
+                                <input type="text" class="ui-spinner" style="width: 60px" name="SelectedInvoice.InvoiceProducts[@i].ReceivedQuantity" value="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).ReceivedQuantity" />
+                                <input type="hidden" name="SelectedInvoice.InvoiceProducts[@i].Id" value="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).Id" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/Transfer/invoice.js"></script>
+}

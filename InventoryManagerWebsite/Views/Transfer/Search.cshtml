@@ -1,37 +1,57 @@
 ﻿@using AspNet.Mvc.Grid
-@model InventoryManagerWebsite.Models.Transfer.InvoiceSearchModel
+@model InventoryManagerWebsite.Models.Invoice.InvoiceSearchViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container" style="width: 800px; text-align: center">
-    @using (@Html.BeginForm())
+    @using (@Html.BeginForm("Search", "Transfer", FormMethod.Post))
     {
         @Html.HiddenFor(x => x.SelectedInvoiceId)
-        <div class="row" style="font-size: x-large; font-weight: bold">
-            Receiving
+        <div class="row">
+            <div class="col-sm-12 subtitle">
+                Receiving
+            </div>
         </div>
-        <div class="col-sm-12 form-group" style="text-align: center">
-            @Html.LabelFor(x => x.InvoiceSearchText, "Search")
-            @Html.TextBoxFor(x => x.InvoiceSearchText, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "receiving-search-box form-control input-lg" } })
+        <div class="row">
+            <div class="col-sm-12 input-group">
+                @Html.TextBoxFor(x => x.InvoiceSearchText, new Dictionary<string, object> { { "placeholder", "Enter your search term" }, { "class", "form-control input-lg" } })
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit">Search</button>
+                </div>
+            </div>
         </div>
-        <div class="row" style="width: 800px">
-        <hr style="width: 100%" />
-        @if (Model.Invoices != null && Model.Invoices.Any())
-        {
-            @Html.Grid(Model.Invoices).Columns(cb =>
+        <div class="row" style="padding-top: 40px">
+            @if (Model.Invoices != null && Model.Invoices.Any())
             {
-            cb.For(p => p.Id).Named("Invoice ID").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
-            cb.For(p => p.InvoiceType).Named("Invoice Type").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
-            cb.For(p => p.CreationDate.ToShortDateString()).Named("Created").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
-            cb.For(p => p.TotalItems).Named("# Items").HeaderAttributes(new Dictionary<string, object> {{"style", "text-align:center"}}).Sortable(false);
-            cb.For(p => p.Status).Named("Status").HeaderAttributes(new Dictionary<string, object> { { "style", "text-align:center" } }).Sortable(false);
-        }).Attributes(@class => "table table-hover")
-        }
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="text-align:center">Invoice ID</th>
+                            <th scope="col" style="text-align:center">Invoice Type</th>
+                            <th scope="col" style="text-align:center">Created</th>
+                            <th scope="col" style="text-align:center"># Items</th>
+                            <th scope="col" style="text-align:center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var invoice in Model.Invoices)
+                        {
+                            <tr style="cursor:pointer" onclick="SelectInvoice(@invoice.Id)">
+                                <td>@invoice.Id</td>
+                                <td>@invoice.InvoiceType</td>
+                                <td>@invoice.CreationDate.ToShortDateString()</td>
+                                <td>@invoice.TotalItems</td>
+                                <td>@invoice.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     }
 </div>
 
 @section Scripts
-    {
-    @*<script src="~/Scripts/Transfer/receive.js"></script>*@
+{
+    <script src="~/Scripts/Transfer/search.js"></script>
 }

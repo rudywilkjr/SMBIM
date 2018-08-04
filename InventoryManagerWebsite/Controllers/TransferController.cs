@@ -5,6 +5,7 @@ using InventoryManagerService.Inventory;
 using InventoryManagerService.Invoice;
 using InventoryManagerService.Location;
 using InventoryManagerService.Transfer;
+using InventoryManagerWebsite.Models.Invoice;
 using InventoryManagerWebsite.Models.Transfer;
 
 namespace InventoryManagerWebsite.Controllers
@@ -53,23 +54,35 @@ namespace InventoryManagerWebsite.Controllers
         }
 
         [Route("Search")]
-        public ActionResult Search(InvoiceSearchModel model)
+        public ActionResult Search(SearchInputModel model)
         {
-            model.Invoices = _invoiceService.GetInvoices(model.InvoiceSearchText);
+            var viewModel = new InvoiceSearchViewModel
+            {
+                Invoices = _invoiceService.GetInvoices(model.InvoiceSearchText)
+            };
             
-            return View("Search", model);
+            return View("Search", viewModel);
+        }
+
+        [Route("Invoice/{invoiceId}")]
+        public ActionResult Invoice(int invoiceId)
+        {
+            var model = new ReceiveInvoiceViewModel
+            {
+                SelectedInvoice = _invoiceService.GetInvoice(invoiceId),
+                Locations = _locationService.GetLocations(3),
+            };
+            return View("Invoice", model);
         }
 
         [Route("Receive")]
-        public ActionResult Receive()
+        public ActionResult Receive(ReceiveInvoiceViewModel model)
         {
-            var model = new ReceiveModel
-            {
-                Products = 
-                    _inventoryService.GetProductItems(string.Empty),
-                DestinationLocations = _locationService.GetLocations(1).ToList(),
-                SourceLocations = _locationService.GetExternalLocations()
-            };
+            //foreach(var product in model.SelectedInvoice.InvoiceProducts)
+            //{
+            //    _transferService.TransferOut(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity)
+            //}
+            TempData["Toast"] = "Invoice ID " + model.SelectedInvoice.Id + " Saved Successfully.";
 
             return View("Receive", model);
         }
@@ -80,19 +93,19 @@ namespace InventoryManagerWebsite.Controllers
         {
             try
             {
-                model.Locations = _locationService.GetLocations();
-                model.TransferComplete = _transferService.TransferOut(model.SelectedInventoryId, model.SelectedDepartureLocationId,
-                    model.SelectedArrivingLocationId, model.SelectedQuantity);
+                //model.Locations = _locationService.GetLocations();
+                //model.TransferComplete = _transferService.TransferOut(model.SelectedInventoryId, model.SelectedDepartureLocationId,
+                //    model.SelectedArrivingLocationId, model.SelectedQuantity);
 
-                if (!model.TransferComplete.GetValueOrDefault())
-                {
-                    ModelState.AddModelError("GENERALERR-1", "Transfer Incomplete. General Error");
-                }
+                //if (!model.TransferComplete.GetValueOrDefault())
+                //{
+                //    ModelState.AddModelError("GENERALERR-1", "Transfer Incomplete. General Error");
+                //}
 
-                model.ItemsAtLocation =
-                    _inventoryService.GetAllLocationsWithProduct()
-                        .ToList();
-                model.SelectedQuantity = 0;
+                //model.ItemsAtLocation =
+                //    _inventoryService.GetAllLocationsWithProduct()
+                //        .ToList();
+                //model.SelectedQuantity = 0;
                 return View("Move", model);
             }
             catch (Exception e)
@@ -117,8 +130,8 @@ namespace InventoryManagerWebsite.Controllers
                 model.DestinationLocations = _locationService.GetLocations(1); //1: Internal
                 model.SourceLocations = _locationService.GetExternalLocations();
                 model.Products = _inventoryService.GetProductItems(string.Empty);
-                model.TransferComplete = _transferService.TransferOut(model.SelectedProductId, 
-                    model.SelectedSourceLocationId, model.SelectedDestinationLocationId, model.SelectedQuantity);
+                //model.TransferComplete = _transferService.TransferOut(model.SelectedProductId, 
+                //    model.SelectedSourceLocationId, model.SelectedDestinationLocationId, model.SelectedQuantity);
 
                 if (!model.TransferComplete.GetValueOrDefault())
                 {

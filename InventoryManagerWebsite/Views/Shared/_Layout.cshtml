@@ -6,35 +6,32 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Content/toastr.css")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Hank's Propane & Propane Accessories", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Products", "Index", "Product")</li>
-                    <li>@Html.ActionLink("Receiving", "Search", "Transfer")</li>
-                    <li>@Html.ActionLink("Product Reporting", "Product", "Report")</li>
-                    <li>@Html.ActionLink("Transfer Reporting", "Transfer", "Report")</li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        @Html.ActionLink("Hank's Propane & Propane Accessories", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">@Html.ActionLink("Products", "Index", "Product", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Receiving", "Search", "Transfer", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Product Reporting", "Product", "Report", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Transfer Reporting", "Transfer", "Report", null, new { @class = "nav-link" })</li>
+            </ul>
         </div>
-    </div>
-    <div id="siteContentContainer" class="container body-content">
-        @RenderBody()
-    </div>
+
+    </nav>
+
+    @RenderBody()
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/toastr.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>
