@@ -5,26 +5,11 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="StoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Direction">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="DirectionType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DirectionId" Type="smallint" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
-        </EntityType>
         <EntityType Name="Invoice">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SupplierId" Type="smallint" Nullable="false" />
           <Property Name="CreationDate" Type="datetime" Nullable="false" />
         </EntityType>
@@ -32,7 +17,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InvoiceId" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="0" Nullable="false" />
@@ -102,11 +87,11 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ActivityTime" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
-          <Property Name="LocationId" Type="int" Nullable="false" />
-          <Property Name="DirectionId" Type="smallint" />
+          <Property Name="SourceLocationId" Type="int" Nullable="false" />
+          <Property Name="DestinationLocationId" Type="int" Nullable="false" />
           <Property Name="OriginalQuantity" Type="int" Nullable="false" />
           <Property Name="NewQuantity" Type="int" Nullable="false" />
         </EntityType>
@@ -119,54 +104,6 @@
             </Principal>
             <Dependent Role="Location">
               <PropertyRef Name="Type" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Transfer__Direct__1FCDBCEB">
-          <End Role="Direction" Type="Self.Direction" Multiplicity="0..1" />
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Direction">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="DirectionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Transfer__Invent__4BAC3F29">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Transfer__Locati__4AB81AF0">
-          <End Role="Location" Type="Self.Location" Multiplicity="1" />
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Location">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="LocationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Direction_DirectionType">
-          <End Role="Direction" Type="Self.Direction" Multiplicity="1" />
-          <End Role="DirectionType" Type="Self.DirectionType" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Direction">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DirectionType">
-              <PropertyRef Name="DirectionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -266,9 +203,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Transfer_Location_1">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="DestinationLocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_Location_2">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="SourceLocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="StoreModelStoreContainer">
-          <EntitySet Name="Direction" EntityType="Self.Direction" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DirectionType" EntityType="Self.DirectionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvoiceProduct" EntityType="Self.InvoiceProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
@@ -282,22 +253,6 @@
           <AssociationSet Name="FK__Location__Type__49C3F6B7" Association="Self.FK__Location__Type__49C3F6B7">
             <End Role="LocationType" EntitySet="LocationType" />
             <End Role="Location" EntitySet="Location" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Transfer__Direct__1FCDBCEB" Association="Self.FK__Transfer__Direct__1FCDBCEB">
-            <End Role="Direction" EntitySet="Direction" />
-            <End Role="Transfer" EntitySet="Transfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Transfer__Invent__4BAC3F29" Association="Self.FK__Transfer__Invent__4BAC3F29">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="Transfer" EntitySet="Transfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Transfer__Locati__4AB81AF0" Association="Self.FK__Transfer__Locati__4AB81AF0">
-            <End Role="Location" EntitySet="Location" />
-            <End Role="Transfer" EntitySet="Transfer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Direction_DirectionType" Association="Self.FK_Direction_DirectionType">
-            <End Role="Direction" EntitySet="Direction" />
-            <End Role="DirectionType" EntitySet="DirectionType" />
           </AssociationSet>
           <AssociationSet Name="FK_Invoice_Supplier" Association="Self.FK_Invoice_Supplier">
             <End Role="Supplier" EntitySet="Supplier" />
@@ -331,29 +286,23 @@
             <End Role="SupplierType" EntitySet="SupplierType" />
             <End Role="Supplier" EntitySet="Supplier" />
           </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Location_1" Association="Self.FK_Transfer_Location_1">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Location_2" Association="Self.FK_Transfer_Location_2">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Product" Association="Self.FK_Transfer_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Transfer" EntitySet="Transfer" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="StoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Direction">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Transfers" Relationship="Self.FK__Transfer__Direct__1FCDBCEB" FromRole="Direction" ToRole="Transfer" />
-          <NavigationProperty Name="DirectionTypes" Relationship="Self.FK_Direction_DirectionType" FromRole="Direction" ToRole="DirectionType" />
-        </EntityType>
-        <EntityType Name="DirectionType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DirectionId" Type="Int16" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Direction" Relationship="Self.FK_Direction_DirectionType" FromRole="DirectionType" ToRole="Direction" />
-        </EntityType>
         <EntityType Name="Invoice">
           <Key>
             <PropertyRef Name="Id" />
@@ -386,9 +335,10 @@
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <NavigationProperty Name="LocationType" Relationship="Self.FK__Location__Type__49C3F6B7" FromRole="Location" ToRole="LocationType" />
-          <NavigationProperty Name="Transfers" Relationship="Self.FK__Transfer__Locati__4AB81AF0" FromRole="Location" ToRole="Transfer" />
           <NavigationProperty Name="ProductLocations" Relationship="Self.FK_Location_InventoryLocation" FromRole="Location" ToRole="ProductLocation" />
-        </EntityType>
+          <NavigationProperty Name="Transfers" Relationship="StoreModel.FK_Transfer_Location_1" FromRole="Location" ToRole="Transfer" />
+          <NavigationProperty Name="Transfers1" Relationship="StoreModel.FK_Transfer_Location_2" FromRole="Location" ToRole="Transfer" />
+          </EntityType>
         <EntityType Name="LocationType">
           <Key>
             <PropertyRef Name="Id" />
@@ -406,10 +356,10 @@
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Weight" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
           <NavigationProperty Name="InvoiceProducts" Relationship="Self.FK_InvoiceProduct_Product" FromRole="Product" ToRole="InvoiceProduct" />
-          <NavigationProperty Name="Transfers" Relationship="Self.FK__Transfer__Invent__4BAC3F29" FromRole="Product" ToRole="Transfer" />
           <NavigationProperty Name="ProductLocations" Relationship="Self.FK_Product_InventoryLocation" FromRole="Product" ToRole="ProductLocation" />
           <NavigationProperty Name="ProductSuppliers" Relationship="StoreModel.FK_ProductSupplier_Product" FromRole="Product" ToRole="ProductSupplier" />
-        </EntityType>
+          <NavigationProperty Name="Transfers" Relationship="StoreModel.FK_Transfer_Product" FromRole="Product" ToRole="Transfer" />
+          </EntityType>
         <EntityType Name="ProductLocation">
           <Key>
             <PropertyRef Name="InventoryId" />
@@ -433,45 +383,6 @@
           <NavigationProperty Name="ProductSuppliers" Relationship="StoreModel.FK_ProductSupplier_Supplier" FromRole="Supplier" ToRole="ProductSupplier" />
           <NavigationProperty Name="SupplierType" Relationship="StoreModel.FK_Supplier_SupplierType" FromRole="Supplier" ToRole="SupplierType" />
         </EntityType>
-        <EntityType Name="Transfer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" />
-          <Property Name="ActivityTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="LocationId" Type="Int32" Nullable="false" />
-          <Property Name="DirectionId" Type="Int16" />
-          <Property Name="OriginalQuantity" Type="Int32" Nullable="false" />
-          <Property Name="NewQuantity" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Direction" Relationship="Self.FK__Transfer__Direct__1FCDBCEB" FromRole="Transfer" ToRole="Direction" />
-          <NavigationProperty Name="Location" Relationship="Self.FK__Transfer__Locati__4AB81AF0" FromRole="Transfer" ToRole="Location" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__Transfer__Invent__4BAC3F29" FromRole="Transfer" ToRole="Product" />
-        </EntityType>
-        <Association Name="FK__Transfer__Direct__1FCDBCEB">
-          <End Role="Direction" Type="Self.Direction" Multiplicity="0..1" />
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Direction">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="DirectionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Direction_DirectionType">
-          <End Role="Direction" Type="Self.Direction" Multiplicity="1" />
-          <End Role="DirectionType" Type="Self.DirectionType" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Direction">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DirectionType">
-              <PropertyRef Name="DirectionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Invoice_Supplier">
           <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
@@ -520,18 +431,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Transfer__Locati__4AB81AF0">
-          <End Role="Location" Type="Self.Location" Multiplicity="1" />
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Location">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="LocationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Location_InventoryLocation">
           <End Role="Location" Type="Self.Location" Multiplicity="1" />
           <End Role="ProductLocation" Type="Self.ProductLocation" Multiplicity="*" />
@@ -541,18 +440,6 @@
             </Principal>
             <Dependent Role="ProductLocation">
               <PropertyRef Name="LocationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Transfer__Invent__4BAC3F29">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="Transfer" Type="Self.Transfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Transfer">
-              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -569,8 +456,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="StoreEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Directions" EntityType="Self.Direction" />
-          <EntitySet Name="DirectionTypes" EntityType="Self.DirectionType" />
           <EntitySet Name="Invoices" EntityType="Self.Invoice" />
           <EntitySet Name="InvoiceProducts" EntityType="Self.InvoiceProduct" />
           <EntitySet Name="Locations" EntityType="Self.Location" />
@@ -578,15 +463,6 @@
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="ProductLocations" EntityType="Self.ProductLocation" />
           <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
-          <EntitySet Name="Transfers" EntityType="Self.Transfer" />
-          <AssociationSet Name="FK__Transfer__Direct__1FCDBCEB" Association="Self.FK__Transfer__Direct__1FCDBCEB">
-            <End Role="Direction" EntitySet="Directions" />
-            <End Role="Transfer" EntitySet="Transfers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Direction_DirectionType" Association="Self.FK_Direction_DirectionType">
-            <End Role="Direction" EntitySet="Directions" />
-            <End Role="DirectionType" EntitySet="DirectionTypes" />
-          </AssociationSet>
           <AssociationSet Name="FK_Invoice_Supplier" Association="Self.FK_Invoice_Supplier">
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="Invoice" EntitySet="Invoices" />
@@ -603,17 +479,9 @@
             <End Role="LocationType" EntitySet="LocationTypes" />
             <End Role="Location" EntitySet="Locations" />
           </AssociationSet>
-          <AssociationSet Name="FK__Transfer__Locati__4AB81AF0" Association="Self.FK__Transfer__Locati__4AB81AF0">
-            <End Role="Location" EntitySet="Locations" />
-            <End Role="Transfer" EntitySet="Transfers" />
-          </AssociationSet>
           <AssociationSet Name="FK_Location_InventoryLocation" Association="Self.FK_Location_InventoryLocation">
             <End Role="Location" EntitySet="Locations" />
             <End Role="ProductLocation" EntitySet="ProductLocations" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Transfer__Invent__4BAC3F29" Association="Self.FK__Transfer__Invent__4BAC3F29">
-            <End Role="Product" EntitySet="Products" />
-            <End Role="Transfer" EntitySet="Transfers" />
           </AssociationSet>
           <AssociationSet Name="FK_Product_InventoryLocation" Association="Self.FK_Product_InventoryLocation">
             <End Role="Product" EntitySet="Products" />
@@ -633,7 +501,20 @@
             <End Role="SupplierType" EntitySet="SupplierTypes" />
             <End Role="Supplier" EntitySet="Suppliers" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="Transfers" EntityType="StoreModel.Transfer" />
+          <AssociationSet Name="FK_Transfer_Location_1" Association="StoreModel.FK_Transfer_Location_1">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Transfer" EntitySet="Transfers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Location_2" Association="StoreModel.FK_Transfer_Location_2">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Transfer" EntitySet="Transfers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transfer_Product" Association="StoreModel.FK_Transfer_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Transfer" EntitySet="Transfers" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="ProductSupplier">
           <Key>
             <PropertyRef Name="Id" />
@@ -689,29 +570,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="Transfer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="ActivityTime" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="SourceLocationId" Type="Int32" Nullable="false" />
+          <Property Name="DestinationLocationId" Type="Int32" Nullable="false" />
+          <Property Name="OriginalQuantity" Type="Int32" Nullable="false" />
+          <Property Name="NewQuantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DestinationLocation" Relationship="StoreModel.FK_Transfer_Location_1" FromRole="Transfer" ToRole="Location" />
+          <NavigationProperty Name="SourceLocation" Relationship="StoreModel.FK_Transfer_Location_2" FromRole="Transfer" ToRole="Location" />
+          <NavigationProperty Name="Product" Relationship="StoreModel.FK_Transfer_Product" FromRole="Transfer" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_Transfer_Location_1">
+          <End Type="StoreModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="StoreModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="DestinationLocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_Location_2">
+          <End Type="StoreModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="StoreModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="SourceLocationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transfer_Product">
+          <End Type="StoreModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="StoreModel.Transfer" Role="Transfer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transfer">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="StoreModelStoreContainer" CdmEntityContainer="StoreEntities">
-          <EntitySetMapping Name="Directions">
-            <EntityTypeMapping TypeName="StoreModel.Direction">
-              <MappingFragment StoreEntitySet="Direction">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DirectionTypes">
-            <EntityTypeMapping TypeName="StoreModel.DirectionType">
-              <MappingFragment StoreEntitySet="DirectionType">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="DirectionId" ColumnName="DirectionId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Invoices">
             <EntityTypeMapping TypeName="StoreModel.Invoice">
               <MappingFragment StoreEntitySet="Invoice">
@@ -780,19 +695,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Transfers">
-            <EntityTypeMapping TypeName="StoreModel.Transfer">
-              <MappingFragment StoreEntitySet="Transfer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ActivityTime" ColumnName="ActivityTime" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
-                <ScalarProperty Name="DirectionId" ColumnName="DirectionId" />
-                <ScalarProperty Name="OriginalQuantity" ColumnName="OriginalQuantity" />
-                <ScalarProperty Name="NewQuantity" ColumnName="NewQuantity" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ProductSuppliers">
             <EntityTypeMapping TypeName="StoreModel.ProductSupplier">
               <MappingFragment StoreEntitySet="ProductSupplier">
@@ -807,6 +709,19 @@
             <EntityTypeMapping TypeName="StoreModel.SupplierType">
               <MappingFragment StoreEntitySet="SupplierType">
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transfers">
+            <EntityTypeMapping TypeName="StoreModel.Transfer">
+              <MappingFragment StoreEntitySet="Transfer">
+                <ScalarProperty Name="NewQuantity" ColumnName="NewQuantity" />
+                <ScalarProperty Name="OriginalQuantity" ColumnName="OriginalQuantity" />
+                <ScalarProperty Name="DestinationLocationId" ColumnName="DestinationLocationId" />
+                <ScalarProperty Name="SourceLocationId" ColumnName="SourceLocationId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ActivityTime" ColumnName="ActivityTime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -74,12 +74,6 @@
     <Compile Include="DTO\SupplierDto.cs" />
     <Compile Include="DTO\SupplierTypeDto.cs" />
     <Compile Include="DTO\TransferDto.cs" />
-    <Compile Include="Models\Direction.cs">
-      <DependentUpon>StoreModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DirectionType.cs">
-      <DependentUpon>StoreModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>

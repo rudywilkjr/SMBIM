@@ -62,8 +62,8 @@ namespace DataAccess.Repositories
                 transferItem = new Transfer
                 {
                     ActivityTime = DateTimeOffset.Now,
-                    DirectionId = transfer.DirectionId,
-                    LocationId = transfer.LocationId,
+                    SourceLocationId = transfer.SourceLocationId,
+                    DestinationLocationId = transfer.DestinationLocationId,
                     ProductId = transfer.ProductId,
                     OriginalQuantity = transfer.OriginalQuantity,
                     NewQuantity = transfer.NewQuantity
@@ -126,6 +126,32 @@ namespace DataAccess.Repositories
                 ctx.SaveChanges();
             }
             return true;
+        }
+
+        public void ReceiveInvoiceInventory(int invoiceProductId, int sourceLocationId, int destinationLocationId, short quantity)
+        {
+            using (var ctx = new StoreEntities())
+            {
+                var invoiceProduct = ctx.InvoiceProducts.Single(x => x.Id == invoiceProductId);
+                var originalQuantity = invoiceProduct.ReceivedQuantity;
+                invoiceProduct.ReceivedQuantity = quantity;
+
+                if (originalQuantity != invoiceProduct.ReceivedQuantity)
+                {
+                    CreateTransfer(new TransferDto
+                    {
+                        ActivityTime = DateTimeOffset.Now,
+                        ProductId = invoiceProduct.ProductId,
+                        SourceLocationId = sourceLocationId,
+                        DestinationLocationId = destinationLocationId,
+                        OriginalQuantity = originalQuantity,
+                        NewQuantity = invoiceProduct.ReceivedQuantity
+                    });
+
+                    ctx.SaveChanges();
+                }
+
+            }
         }
     }
 }

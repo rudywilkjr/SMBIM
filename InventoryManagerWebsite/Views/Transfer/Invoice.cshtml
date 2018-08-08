@@ -9,7 +9,6 @@
 <div class="container" style="text-align: center">
     @using (Html.BeginForm("Receive", "Transfer", FormMethod.Post))
     {
-        @Html.HiddenFor(x => x.SelectedInvoice.Id)
         <div class="row" style="font-size: x-large; font-weight: bold">
             <div class="col-sm-12 subtitle">
                 Receive Invoice
@@ -38,18 +37,33 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Model.SelectedInvoice.Id</td>
-                        <td>@Model.SelectedInvoice.InvoiceType</td>
-                        <td>@Model.SelectedInvoice.CreationDate.ToShortDateString()</td>
-                        <td>@Model.SelectedInvoice.TotalItems</td>
-                        <td>@Model.SelectedInvoice.Status</td>
+                        <td>
+                            @Model.SelectedInvoice.Id
+                            @Html.HiddenFor(x => x.SelectedInvoice.Id)
+                        </td>
+                        <td>
+                            @Model.SelectedInvoice.InvoiceType
+                            @Html.HiddenFor(x => x.SelectedInvoice.InvoiceType)
+                        </td>
+                        <td>
+                            @Model.SelectedInvoice.CreationDate.ToShortDateString()
+                            @Html.HiddenFor(x => x.SelectedInvoice.CreationDate)
+                        </td>
+                        <td>
+                            @Model.SelectedInvoice.TotalItems
+                            @Html.HiddenFor(x => x.SelectedInvoice.TotalItems)
+                        </td>
+                        <td>
+                            @Model.SelectedInvoice.Status
+                            @Html.HiddenFor(x => x.SelectedInvoice.Status)
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="row" style="padding-top:40px; padding-bottom:20px; margin-left:40px; margin-right:40px;">
             <div class="col-sm-6">
-                @Html.DropDownListFor(x => x.SelectedLocationId, Model.LocationsList, "Select Location", new { @class = "form-control", style = "width: auto; display: inline" })
+                @Html.DropDownListFor(x => x.SelectedLocationId, Model.LocationsList, "Select Location", new { @class = "form-control", style = "width: auto; display: inline", required = "required" })
             </div>
             <div class="col-sm-6">
                 <input type="submit" class="btn btn-success" style="text-align: right" />
@@ -59,6 +73,7 @@
             <table class="table center table-striped">
                 <thead class="thead-light">
                     <tr>
+                        <th scope="col" class="syncStatusCell"></th>
                         <th scope="col">Product</th>
                         <th scope="col"># Items</th>
                         <th scope="col">Received</th>
@@ -68,8 +83,16 @@
                     @for (var i = 0; i < Model.SelectedInvoice.InvoiceProducts.Count(); i++)
                     {
                         <tr>
-                            <td>@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).Product.Name</td>
-                            <td>@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).OrderedQuantity</td>
+                            @{ string syncColor = Model.SelectedInvoice.InvoiceProducts.ElementAt(i).IsSynced.HasValue ? @Model.SelectedInvoice.InvoiceProducts.ElementAt(i).IsSynced.GetValueOrDefault(true) ? "saved" : "error" : "";}
+                            <td class="syncStatusCell @syncColor" title="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).SyncMessage" >&nbsp;</td>
+                            <td>
+                                @Model.SelectedInvoice.InvoiceProducts.ElementAt(i).Name
+                                <input type="hidden" name="SelectedInvoice.InvoiceProducts[@i].Name" value="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).Name" />
+                            </td>
+                            <td>
+                                @Model.SelectedInvoice.InvoiceProducts.ElementAt(i).OrderedQuantity
+                                <input type="hidden" name="SelectedInvoice.InvoiceProducts[@i].OrderedQuantity" value="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).OrderedQuantity" />
+                            </td>
                             <td>
                                 <input type="text" class="ui-spinner" style="width: 60px" name="SelectedInvoice.InvoiceProducts[@i].ReceivedQuantity" value="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).ReceivedQuantity" />
                                 <input type="hidden" name="SelectedInvoice.InvoiceProducts[@i].Id" value="@Model.SelectedInvoice.InvoiceProducts.ElementAt(i).Id" />

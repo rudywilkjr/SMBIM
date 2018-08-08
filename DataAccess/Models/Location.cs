@@ -17,8 +17,9 @@ namespace DataAccess.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Location()
         {
-            this.Transfers = new HashSet<Transfer>();
             this.ProductLocations = new HashSet<ProductLocation>();
+            this.Transfers = new HashSet<Transfer>();
+            this.Transfers1 = new HashSet<Transfer>();
         }
     
         public int Id { get; set; }
@@ -28,8 +29,10 @@ namespace DataAccess.Models
     
         public virtual LocationType LocationType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductLocation> ProductLocations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Transfer> Transfers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductLocation> ProductLocations { get; set; }
+        public virtual ICollection<Transfer> Transfers1 { get; set; }
     }
 }

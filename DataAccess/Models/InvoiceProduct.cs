@@ -18,7 +18,6 @@ namespace DataAccess.Models
         public int InvoiceId { get; set; }
         public int ProductId { get; set; }
         public decimal Cost { get; set; }
-        public short Quantity { get; set; }
         public short OrderedQuantity { get; set; }
         public short ReceivedQuantity { get; set; }
     

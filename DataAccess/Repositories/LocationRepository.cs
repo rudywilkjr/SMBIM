@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataAccess.DTO;
 using DataAccess.Models;
@@ -47,7 +48,7 @@ namespace DataAccess.Repositories
             Location locationItem;
             using (var ctx = new StoreEntities())
             {
-                locationItem = ctx.Locations.Include("LocationType").Single(x => x.Id == id);
+                locationItem = ctx.Locations.Include("LocationType").SingleOrDefault(x => x.Id == id);
             }
 
             return AutoMapper.Mapper.Map<LocationDto>(locationItem);

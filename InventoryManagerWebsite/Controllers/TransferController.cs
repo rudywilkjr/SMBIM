@@ -67,9 +67,10 @@ namespace InventoryManagerWebsite.Controllers
         [Route("Invoice/{invoiceId}")]
         public ActionResult Invoice(int invoiceId)
         {
+            var invoice = _invoiceService.GetInvoice(invoiceId);
             var model = new ReceiveInvoiceViewModel
             {
-                SelectedInvoice = _invoiceService.GetInvoice(invoiceId),
+                SelectedInvoice = AutoMapper.Mapper.Map<InvoiceModel>(invoice),
                 Locations = _locationService.GetLocations(3),
             };
             return View("Invoice", model);
@@ -78,13 +79,37 @@ namespace InventoryManagerWebsite.Controllers
         [Route("Receive")]
         public ActionResult Receive(ReceiveInvoiceViewModel model)
         {
-            //foreach(var product in model.SelectedInvoice.InvoiceProducts)
-            //{
-            //    _transferService.TransferOut(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity)
-            //}
+            try
+            {
+                foreach(var product in model.SelectedInvoice.InvoiceProducts)
+                {
+                    try
+                    {
+                        if (product.ReceivedQuantity != _invoiceService.GetInvoiceProduct(product.Id).ReceivedQuantity)
+                        {
+                            _transferService.ReceiveInvoiceProduct(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity);
+                            product.IsSynced = true;
+                            product.SyncMessage = "Update saved successfully.";
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        product.IsSynced = false;
+                        product.SyncMessage = e.Message;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["Toast"] = "Invoice ID " + model.SelectedInvoice.Id + " Not Saved Successfully.";
+                TempData["ToastType"] = "Error";
+            }
+
+            TempData["ToastType"] = "Success";
             TempData["Toast"] = "Invoice ID " + model.SelectedInvoice.Id + " Saved Successfully.";
 
-            return View("Receive", model);
+            model.Locations = _locationService.GetLocations(3);
+            return View("Invoice", model);
         }
 
         [HttpPost]

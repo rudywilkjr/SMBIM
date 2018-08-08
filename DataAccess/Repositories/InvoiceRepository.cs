@@ -52,5 +52,18 @@ namespace DataAccess.Repositories
 
             return AutoMapper.Mapper.Map<List<InvoiceDto>>(invoiceItems);
         }
+
+        public InvoiceProductDto GetInvoiceProduct(int invoiceProductId)
+        {
+            InvoiceProduct invoiceProduct;
+            using (var ctx = new StoreEntities())
+            {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                invoiceProduct = ctx.InvoiceProducts
+                    .SingleOrDefault(x => x.Id == invoiceProductId);
+            }
+
+            return AutoMapper.Mapper.Map<InvoiceProductDto>(invoiceProduct);
+        }
     }
 }

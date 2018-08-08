@@ -25,8 +25,6 @@ namespace DataAccess.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Direction> Directions { get; set; }
-        public virtual DbSet<DirectionType> DirectionTypes { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<InvoiceProduct> InvoiceProducts { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
@@ -34,8 +32,8 @@ namespace DataAccess.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductLocation> ProductLocations { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
-        public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<ProductSupplier> ProductSuppliers { get; set; }
         public virtual DbSet<SupplierType> SupplierTypes { get; set; }
+        public virtual DbSet<Transfer> Transfers { get; set; }
     }
 }

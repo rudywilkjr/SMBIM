@@ -12,6 +12,7 @@ namespace InventoryManagerService.Transfer
         private readonly TransferRepository _transferRepository = new TransferRepository();
         private readonly ProductRepository _inventoryRepository = new ProductRepository();
         private readonly LocationRepository _locationRepository = new LocationRepository();
+        private readonly InvoiceRepository _invoiceRepository = new InvoiceRepository();
 
         public TransferDto GetTransfer(int transferId)
         {
@@ -34,6 +35,29 @@ namespace InventoryManagerService.Transfer
             {
                 TransferOut(product.Id, leavingLocationId, arrivingLocationId, quantity);
             }
+        }
+
+        public void ReceiveInvoiceProduct(int invoiceProductId, int sourceLocationId, int destinationLocationId, short quantity)
+        {
+            try
+            {
+                if (_locationRepository.GetLocation(sourceLocationId) == null)
+                {
+                    throw new ApplicationException("Invalid source location.");
+                }
+
+                if (_locationRepository.GetLocation(destinationLocationId) == null)
+                {
+                    throw new ApplicationException("Invalid destination location.");
+                }
+
+                _transferRepository.ReceiveInvoiceInventory(invoiceProductId, sourceLocationId, destinationLocationId, quantity);
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+            
         }
 
         public void TransferOut(int productId, int leavingLocationId, int arrivingLocationId, int quantity)
@@ -112,9 +136,9 @@ namespace InventoryManagerService.Transfer
             var incomingTransfer = new TransferDto
             {
                 ActivityTime = DateTimeOffset.Now,
-                DirectionId = 1, //Incoming
                 ProductId = productItem.Id,
-                LocationId = newLocationItem.Id,
+                DestinationLocationId = newLocationItem.Id,
+                SourceLocationId = originalLocationItem.Id,
                 OriginalQuantity = inventoryAtDestinationLocation.QuantityOnHand.GetValueOrDefault(),
                 NewQuantity = inventoryAtDestinationLocation.QuantityOnHand.GetValueOrDefault() + quantity
             };
@@ -122,9 +146,9 @@ namespace InventoryManagerService.Transfer
             var outgoingTransfer = new TransferDto
             {
                 ActivityTime = DateTimeOffset.Now,
-                DirectionId = 2, //Outgoing
                 ProductId = productItem.Id,
-                LocationId = originalLocationItem.Id,
+                SourceLocationId = originalLocationItem.Id,
+                DestinationLocationId = newLocationItem.Id,
                 OriginalQuantity = inventoryAtSourceLocation.QuantityOnHand.GetValueOrDefault(),
                 NewQuantity = inventoryAtSourceLocation.QuantityOnHand.GetValueOrDefault() - quantity
             };

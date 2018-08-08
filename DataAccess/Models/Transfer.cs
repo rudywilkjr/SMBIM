@@ -17,13 +17,13 @@ namespace DataAccess.Models
         public long Id { get; set; }
         public System.DateTimeOffset ActivityTime { get; set; }
         public int ProductId { get; set; }
-        public int LocationId { get; set; }
-        public Nullable<short> DirectionId { get; set; }
+        public int SourceLocationId { get; set; }
+        public int DestinationLocationId { get; set; }
         public int OriginalQuantity { get; set; }
         public int NewQuantity { get; set; }
     
-        public virtual Direction Direction { get; set; }
-        public virtual Location Location { get; set; }
+        public virtual Location DestinationLocation { get; set; }
+        public virtual Location SourceLocation { get; set; }
         public virtual Product Product { get; set; }
     }
 }
