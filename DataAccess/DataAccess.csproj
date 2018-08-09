@@ -123,6 +123,7 @@
     <Compile Include="Repositories\InvoiceRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\LocationRepository.cs" />
+    <Compile Include="Repositories\SupplierRepository.cs" />
     <Compile Include="Repositories\TransferRepository.cs" />
   </ItemGroup>
   <ItemGroup>

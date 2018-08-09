@@ -150,12 +150,14 @@
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SupplierService.cs" />
     <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Invoice\SearchInputModel.cs" />
     <Compile Include="Models\Product\ProductModel.cs" />
+    <Compile Include="Models\PurchaseOrder\AddPurchaseOrderViewModel.cs" />
     <Compile Include="Models\PurchaseOrder\PurchaseOrderViewModel.cs" />
     <Compile Include="Models\Report\Product.cs" />
     <Compile Include="Models\Report\Transfer.cs" />
@@ -249,6 +251,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PurchaseOrder\add.js" />
     <Content Include="Scripts\Report\product.js" />
     <Content Include="Scripts\Report\transfer.js" />
     <Content Include="Scripts\respond.js" />
@@ -291,6 +294,7 @@
     <Content Include="Scripts\umd\popper-utils.js.map" />
     <Content Include="Scripts\README.md" />
     <Content Include="Views\PurchaseOrder\View.cshtml" />
+    <Content Include="Views\PurchaseOrder\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

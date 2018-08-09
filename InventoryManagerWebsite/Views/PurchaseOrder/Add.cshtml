@@ -1,0 +1,63 @@
+﻿@model InventoryManagerWebsite.Models.PurchaseOrder.AddPurchaseOrderViewModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid" style="text-align:center">
+    @using (Html.BeginForm("Save", "PurchaseOrder", FormMethod.Post))
+    {
+        <div class="row" style="font-size: x-large; font-weight: bold">
+            <div class="col-sm-12 subtitle">
+                New Purchase Order
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="max-width: 75%; margin: auto; padding-bottom:15px">
+                @Html.DropDownListFor(x => x.SelectedSupplierId, Model.SuppliersList, "Choose Supplier", new { @class = "form-control", style = "width: auto; display: inline", required = "required" })
+            </div>
+        </div>
+        <div class="row" style="max-width: 75%; margin: auto; padding-bottom:15px">
+            <div class="col-sm-3">
+                @Html.DropDownListFor(x => x.SelectedProductId, Model.ProductList, "Choose Product", new { @class = "form-control" })
+                <div class="invalid-tooltip" id="productInvalidTooltip" >
+                    Missing Product!
+                </div>
+            </div>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(x => x.TotalCost, null, new { @class = "form-control", placeholder = "Total Cost", @type = "number" })
+                <div class="invalid-tooltip" id="costInvalidTooltip">
+                    Missing Total Cost!
+                </div>
+            </div>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(x => x.Quantity, null, new { @class = "form-control", placeholder = "Quantity", @type = "number" })
+                <div class="invalid-tooltip" id="quantityInvalidTooltip">
+                    Missing Quantity!
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-success" type="button" onclick="AddItem();">Add New</button>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table center table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Total Cost</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="ItemsGridBody"></tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/PurchaseOrder/add.js"></script>
+}

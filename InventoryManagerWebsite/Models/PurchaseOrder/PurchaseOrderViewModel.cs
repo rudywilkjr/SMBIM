@@ -11,4 +11,5 @@ namespace InventoryManagerWebsite.Models.PurchaseOrder
         public ICollection<InvoiceModel> PurchaseOrders { get; set; }
 
     }
+
 }

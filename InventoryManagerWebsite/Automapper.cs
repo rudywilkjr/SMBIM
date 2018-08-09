@@ -2,6 +2,7 @@
 using DataAccess.DTO;
 using DataAccess.Models;
 using InventoryManagerWebsite.Models.Invoice;
+using InventoryManagerWebsite.Models.PurchaseOrder;
 
 namespace InventoryManagerWebsite
 {
@@ -23,7 +24,9 @@ namespace InventoryManagerWebsite
             Mapper.CreateMap<InvoiceProductDto, InvoiceProductModel>()
                 .ForMember(destination => destination.Name,
                 map => map.MapFrom(source => source.Product.Name));
-                
+            Mapper.CreateMap<SupplierDto, SupplierModel >();
+            Mapper.CreateMap<ProductDto, ProductModel>();
+
 #pragma warning restore 618
         }
 

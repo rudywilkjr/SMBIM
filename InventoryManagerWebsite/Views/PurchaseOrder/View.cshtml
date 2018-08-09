@@ -6,13 +6,24 @@
 }
 
 <div class="container-fluid" style="text-align:center">
-    @using (Html.BeginForm("View", "PurchaseOrder", FormMethod.Post))
-    {
-        <div class="row" style="font-size: x-large; font-weight: bold">
-            <div class="col-sm-12 subtitle">
-                Purchase Orders
+    <div class="row" style="font-size: x-large; font-weight: bold">
+        <div class="col-sm-12 subtitle">
+            Purchase Orders
+        </div>
+    </div>
+    <div class="row" style="font-size: x-large; font-weight: bold">
+        <div class="col-sm-12" style="max-width: 75%; margin: auto; padding-bottom:15px">
+            <div style="text-align: right">
+                @using (@Html.BeginForm("Add", "PurchaseOrder", FormMethod.Get))
+                {
+                    <button class="btn btn-success" type="submit" style="text-align:right">Create New</button>
+                }
+                
             </div>
         </div>
+    </div>
+    @using (Html.BeginForm("View", "PurchaseOrder", FormMethod.Post))
+    {
         <div class="row">
             <div class="col-sm-12">
                 <table class="table center table-striped">
@@ -93,5 +104,6 @@
             </div>
         </div>
     }
-    </div>
+
+</div>
 
