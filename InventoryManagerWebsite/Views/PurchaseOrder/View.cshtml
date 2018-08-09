@@ -1,0 +1,97 @@
+﻿@model InventoryManagerWebsite.Models.PurchaseOrder.PurchaseOrderViewModel
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid" style="text-align:center">
+    @using (Html.BeginForm("View", "PurchaseOrder", FormMethod.Post))
+    {
+        <div class="row" style="font-size: x-large; font-weight: bold">
+            <div class="col-sm-12 subtitle">
+                Purchase Orders
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table center table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Invoice ID</th>
+                            <th scope="col">Creation Date</th>
+                            <th scope="col">Total Items</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.PurchaseOrders.Count(); i++)
+                        {
+                            string invoiceHeader = "#item" + i;
+                            string invoiceDetail = "item" + i;
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="@invoiceHeader">
+                                        +
+                                    </button>
+                                </td>
+                                <td>
+                                    @Model.PurchaseOrders.ElementAt(i).Id
+                                    <input type="hidden" name="PurchaseOrders[@i].Id" value="@Model.PurchaseOrders.ElementAt(i).Id" />
+                                </td>
+                                <td>
+                                    @Model.PurchaseOrders.ElementAt(i).CreationDate.ToShortDateString()
+                                    <input type="hidden" name="PurchaseOrders[@i].CreationDate" value="@Model.PurchaseOrders.ElementAt(i).CreationDate" />
+                                </td>
+                                <td>
+                                    @Model.PurchaseOrders.ElementAt(i).TotalItems
+                                    <input type="hidden" name="PurchaseOrders[@i].TotalItems" value="@Model.PurchaseOrders.ElementAt(i).TotalItems" />
+                                </td>
+                                <td>
+                                    @Model.PurchaseOrders.ElementAt(i).Status
+                                    <input type="hidden" name="PurchaseOrders[@i].Status" value="@Model.PurchaseOrders.ElementAt(i).Status" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="padding:0px">
+                                    <div class="collapse" id="@invoiceDetail" style="padding:10px">
+                                        <table style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Product Name</th>
+                                                    <th scope="col">Ordered</th>
+                                                    <th scope="col">Received</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (var j = 0; j < Model.PurchaseOrders.ElementAt(i).InvoiceProducts.Count(); j++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @Model.PurchaseOrders.ElementAt(i).InvoiceProducts.ElementAt(j).Name
+                                                            <input type="hidden" name="PurchaseOrders[@i].InvoiceProducts[@j].Name" value="@Model.PurchaseOrders.ElementAt(i).InvoiceProducts.ElementAt(j).Name" />
+                                                        </td>
+                                                        <td>
+                                                            @Model.PurchaseOrders.ElementAt(i).InvoiceProducts.ElementAt(j).OrderedQuantity
+                                                            <input type="hidden" name="PurchaseOrders[@i].InvoiceProducts[@j].OrderedQuantity" value="@Model.PurchaseOrders.ElementAt(i).InvoiceProducts.ElementAt(j).OrderedQuantity" />
+                                                        </td>
+                                                        <td>
+                                                            @Model.PurchaseOrders.ElementAt(i).InvoiceProducts.ElementAt(j).ReceivedQuantity
+                                                            <input type="hidden" name="PurchaseOrders[@i].InvoiceProducts[@j].ReceivedQuantity" value="@Model.PurchaseOrders.ElementAt(i).InvoiceProducts.ElementAt(j).ReceivedQuantity" />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    </div>
+
