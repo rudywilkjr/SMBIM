@@ -34,6 +34,7 @@
                             <th scope="col">Creation Date</th>
                             <th scope="col">Total Items</th>
                             <th scope="col">Status</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,29 +42,32 @@
                         {
                             string invoiceHeader = "#item" + i;
                             string invoiceDetail = "item" + i;
-                            <tr>
-                                <td>
-                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="@invoiceHeader">
-                                        +
-                                    </button>
-                                </td>
-                                <td>
-                                    @Model.PurchaseOrders.ElementAt(i).Id
-                                    <input type="hidden" name="PurchaseOrders[@i].Id" value="@Model.PurchaseOrders.ElementAt(i).Id" />
-                                </td>
-                                <td>
-                                    @Model.PurchaseOrders.ElementAt(i).CreationDate.ToShortDateString()
-                                    <input type="hidden" name="PurchaseOrders[@i].CreationDate" value="@Model.PurchaseOrders.ElementAt(i).CreationDate" />
-                                </td>
-                                <td>
-                                    @Model.PurchaseOrders.ElementAt(i).TotalItems
-                                    <input type="hidden" name="PurchaseOrders[@i].TotalItems" value="@Model.PurchaseOrders.ElementAt(i).TotalItems" />
-                                </td>
-                                <td>
-                                    @Model.PurchaseOrders.ElementAt(i).Status
-                                    <input type="hidden" name="PurchaseOrders[@i].Status" value="@Model.PurchaseOrders.ElementAt(i).Status" />
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="@invoiceHeader">
+                                    +
+                                </button>
+                            </td>
+                            <td>
+                                @Model.PurchaseOrders.ElementAt(i).Id
+                                <input type="hidden" name="PurchaseOrders[@i].Id" value="@Model.PurchaseOrders.ElementAt(i).Id" />
+                            </td>
+                            <td>
+                                @Model.PurchaseOrders.ElementAt(i).CreationDate.ToShortDateString()
+                                <input type="hidden" name="PurchaseOrders[@i].CreationDate" value="@Model.PurchaseOrders.ElementAt(i).CreationDate" />
+                            </td>
+                            <td>
+                                @Model.PurchaseOrders.ElementAt(i).TotalItems
+                                <input type="hidden" name="PurchaseOrders[@i].TotalItems" value="@Model.PurchaseOrders.ElementAt(i).TotalItems" />
+                            </td>
+                            <td>
+                                @Model.PurchaseOrders.ElementAt(i).Status
+                                <input type="hidden" name="PurchaseOrders[@i].Status" value="@Model.PurchaseOrders.ElementAt(i).Status" />
+                            </td>
+                            <td>
+                                @Html.ActionLink("Receive", "Invoice", "Transfer", new { invoiceId = Model.PurchaseOrders.ElementAt(i).Id }, new { @class = "btn btn-success"})
+                            </td>
+                        </tr>
                             <tr>
                                 <td colspan="5" style="padding:0px">
                                     <div class="collapse" id="@invoiceDetail" style="padding:10px">
