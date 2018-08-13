@@ -9,7 +9,9 @@ namespace InventoryManagerWebsite.Models.PurchaseOrder
 {
     public class AddPurchaseOrderViewModel
     {
-        public int SelectedSupplierId { get; set; }
+        public int InvoiceId { get; set;
+        }
+        public short SelectedSupplierId { get; set; }
 
         public ICollection<SupplierModel> Suppliers { get; set; }
 

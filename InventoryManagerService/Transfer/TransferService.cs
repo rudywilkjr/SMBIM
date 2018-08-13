@@ -55,7 +55,7 @@ namespace InventoryManagerService.Transfer
             }
             catch(Exception e)
             {
-                throw;
+                throw e;
             }
             
         }

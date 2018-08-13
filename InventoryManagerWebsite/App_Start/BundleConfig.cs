@@ -32,7 +32,8 @@ namespace InventoryManagerWebsite
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/themes/base/*.css",
-                      "~/semantic/packaged/css/semantic.min.css"));
+                      "~/semantic/packaged/css/semantic.min.css",
+                      "~/Content/toastr.css"));
         }
     }
 }

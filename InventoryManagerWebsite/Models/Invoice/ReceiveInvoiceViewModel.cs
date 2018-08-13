@@ -41,11 +41,15 @@ namespace InventoryManagerWebsite.Models.Invoice
 
         public int Id { get; set; }
 
+        public int ProductId { get; set; }
+
         public string Name { get; set; }
 
         public short OrderedQuantity { get; set; }
 
         public short ReceivedQuantity { get; set; }
+
+        public decimal TotalCost { get; set; }
 
         public bool? IsSynced { get; set; }
 

@@ -65,5 +65,39 @@ namespace DataAccess.Repositories
 
             return AutoMapper.Mapper.Map<InvoiceProductDto>(invoiceProduct);
         }
+
+        public InvoiceDto SaveNewPurchaseOrder(short supplierId)
+        {
+            Invoice invoice;
+            using (var ctx = new StoreEntities())
+            {
+                invoice = new Invoice
+                {
+                    CreationDate = DateTime.Now,
+                    SupplierId = supplierId
+                };
+                ctx.Invoices.Add(invoice);
+                ctx.SaveChanges();
+            }
+            return AutoMapper.Mapper.Map<InvoiceDto>(invoice);
+        }
+
+        public void SaveNewPurchaseOrderProduct(int purchaseOrderId, int productId, decimal productCost, short orderedQuantity)
+        {
+            using (var ctx = new StoreEntities())
+            {
+                ctx.InvoiceProducts.Add(new InvoiceProduct
+                {
+                    InvoiceId = purchaseOrderId,
+                    ProductId = productId,
+                    Cost = productCost,
+                    OrderedQuantity = orderedQuantity,
+                    ReceivedQuantity = 0
+                });
+
+                ctx.SaveChanges();
+            }
+        }
+
     }
 }

@@ -34,5 +34,13 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/Scripts/toastr.js")
     @RenderSection("scripts", required: false)
+    @if ((string)TempData["ToastType"] == "Success")
+    {
+        <script>toastr["success"]("@TempData["Toast"]")</script>
+    }
+    else if((string) TempData["ToastType"] == "Error")
+    {
+        <script>toastr["error"]("@TempData["Toast"]")</script>
+    }
 </body>
 </html>

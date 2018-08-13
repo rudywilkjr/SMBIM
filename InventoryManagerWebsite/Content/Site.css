@@ -97,3 +97,29 @@
     background-color: red;
 }
 
+.gridActionCell {
+    cursor: pointer;
+    padding-left:0px;
+    padding-right:0px;
+}
+
+.dynamicCell {
+    vertical-align: middle !important;
+}
+
+.dynamicCell > label {
+    margin-bottom: 0px;
+}
+
+.gridActionCell > img {
+    padding-right: 5px
+}
+
+.hiddenIcon {
+    display: none;
+}
+
+.inline.form-control{
+    width:auto;
+    margin:auto;
+}

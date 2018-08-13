@@ -1,0 +1,94 @@
+﻿@model InventoryManagerWebsite.Models.PurchaseOrder.AddPurchaseOrderViewModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid" style="text-align:center">
+    @using (Html.BeginForm("Save", "PurchaseOrder", FormMethod.Post))
+    {
+        <div class="row" style="font-size: x-large; font-weight: bold">
+            <div class="col-sm-12 subtitle">
+                New Purchase Order
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="max-width: 75%; margin: auto; padding-bottom:15px">
+                @Html.DropDownListFor(x => x.SelectedSupplierId, Model.SuppliersList, "Choose Supplier", new { @class = "form-control", style = "width: auto; display: inline", required = "required" })
+            </div>
+        </div>
+        <div class="row" style="max-width: 75%; margin: auto; padding-bottom:15px">
+            <div class="col-sm-3">
+                @Html.DropDownListFor(x => x.SelectedProductId, Model.ProductList, "Choose Product", new { @class = "form-control" })
+                <div class="invalid-tooltip" id="productInvalidTooltip" >
+                    Missing Product!
+                </div>
+            </div>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(x => x.TotalCost, null, new { @class = "form-control", placeholder = "Total Cost", @type = "number" })
+                <div class="invalid-tooltip" id="costInvalidTooltip">
+                    Missing Total Cost!
+                </div>
+            </div>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(x => x.Quantity, null, new { @class = "form-control", placeholder = "Quantity", @type = "number" })
+                <div class="invalid-tooltip" id="quantityInvalidTooltip">
+                    Missing Quantity!
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <button class="btn btn-success" type="button" onclick="AddItem();">Add New</button>
+                <button class="btn btn-success" type="submit">Save</button>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table center table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" class="syncStatusCell"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Total Cost</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody id="ItemsGridBody">
+                    @if (Model.InvoiceProducts != null && Model.InvoiceProducts.Any())
+                    {
+                        for (var i = 0; i < Model.InvoiceProducts.Count(); i++)
+                        {
+                        <tr class="dynamicRow">
+                            @{ string syncColor = Model.InvoiceProducts.ElementAt(i).IsSynced.HasValue ? @Model.InvoiceProducts.ElementAt(i).IsSynced.GetValueOrDefault(true) ? "saved" : "error" : "";}
+                            <td class="syncStatusCell @syncColor" title="@Model.InvoiceProducts.ElementAt(i).SyncMessage">&nbsp;</td>
+                            <td class="dynamicCell gridActionCell">
+                                <img style="height:20px" class="editIcon" src="~/Content/images/edit.png" onclick="editItem(this)" />
+                                <img style="height:20px" class="doneIcon hiddenIcon" src="~/Content/images/checkmark.png" onclick="completeItem(this)" />
+                                <img style="height:20px" class="deleteIcon hiddenIcon" src="~/Content/images/delete.png" onclick="deleteItem(this)" />
+                            </td>
+                            <td class="dynamicCell">
+                                <label>@Model.InvoiceProducts.ElementAt(i).Name</label>
+                                <input type="hidden" name="InvoiceProducts[@i].Name" value="@Model.InvoiceProducts.ElementAt(i).Name" />
+                                <input type="hidden" name="InvoiceProducts[@i].ProductId" value="@Model.InvoiceProducts.ElementAt(i).ProductId" />
+                            </td>
+                            <td class="dynamicCell">
+                                <label>$@Model.InvoiceProducts.ElementAt(i).TotalCost.ToString("0.00")</label>
+                                <input type="hidden" name="InvoiceProducts[@i].TotalCost" value="@Model.InvoiceProducts.ElementAt(i).TotalCost" />
+                            </td>
+                            <td class="dynamicCell">
+                                <label>@Model.InvoiceProducts.ElementAt(i).OrderedQuantity</label>
+                                <input type="hidden" name="InvoiceProducts[@i].OrderedQuantity" value="@Model.InvoiceProducts.ElementAt(i).OrderedQuantity" />
+                            </td>
+                        </tr>
+                        }
+                    }
+                    </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/PurchaseOrder/new.js?v=1"></script>
+}
