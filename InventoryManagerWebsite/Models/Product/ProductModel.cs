@@ -20,5 +20,6 @@ namespace InventoryManagerWebsite.Models.Product
 
         public string SearchText { get; set; }
 
+        public bool includeInactive { get; set; }
     }
 }

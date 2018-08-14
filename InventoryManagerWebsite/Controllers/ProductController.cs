@@ -52,7 +52,8 @@ namespace InventoryManagerWebsite.Controllers
         {
             var searchedProductsModel = new ProductLookupModel
             {
-                ProductItems = _productService.GetProductItems(searchModel.SearchText)
+                ProductItems = _productService.GetProductItems(searchModel.SearchText, searchModel.includeInactive),
+                includeInactive = searchModel.includeInactive
             };
             
 
@@ -77,6 +78,25 @@ namespace InventoryManagerWebsite.Controllers
             }
             
             return Lookup(new ProductLookupModel { SearchText = model.ProductItem.Name });
+        }
+
+        [HttpPost]
+        public ActionResult Delete(ProductModel model)
+        {
+            try
+            {
+                _productService.DeleteProductItem(model.ProductItem.Id);
+                TempData["ToastType"] = "Success";
+                TempData["Toast"] = "Product Deleted Successfully.";
+            }
+            catch (Exception e)
+            {
+                TempData["ToastType"] = "Error";
+                TempData["Toast"] = e.Message;
+                return Item(model.ProductItem.Id);
+            }
+
+            return Lookup(new ProductLookupModel { SearchText = null });
         }
 
     }

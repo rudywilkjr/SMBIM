@@ -6,23 +6,34 @@
 
 @using (Html.BeginForm("Lookup", "Product", FormMethod.Post))
 {
-    <div class="container" style="text-align: center">
-        <div class="row" style="font-size: x-large; font-weight: bold">
-            <div class="col-sm-12" style="padding-bottom: 20px;">
-                Product - Item Lookup
-            </div>
+<div class="container" style="text-align: center">
+    <div class="row" style="font-size: x-large; font-weight: bold">
+        <div class="col-sm-12" style="padding-bottom: 20px;">
+            Product - Item Lookup
         </div>
-        <div class="row">
-            <div class="col-sm-12" style="text-align: center">
-                <div class="input-group">
-                    @Html.TextBoxFor(x => x.SearchText, new Dictionary<string, object> { { "placeholder", "Enter your search term" }, { "class", "form-control input-lg" } })
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary" type="submit">Search</button>
-                    </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: center">
+            <div class="input-group">
+                @Html.TextBoxFor(x => x.SearchText, new Dictionary<string, object> { { "placeholder", "Enter your search term" }, { "class", "form-control input-lg" } })
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="submit">Search</button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row" style="padding-top:10px">
+        <div class="col-7 col-sm-8 col-lg-10">
+            
+        </div>
+        <div class="col-5 col-sm-4 col-lg-2">
+            <div class="input-group">
+                @Html.LabelFor(x => x.includeInactive, "Include Inactive", new { @class = "form-check-label" })
+                @Html.CheckBoxFor(x => x.includeInactive, new { @class = "form-check-input" })
+            </div>
+        </div>
+    </div>
+</div>
 }
 
 @if (Model.ProductItems != null && Model.ProductItems.Any())

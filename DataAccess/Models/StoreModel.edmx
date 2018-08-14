@@ -48,6 +48,7 @@
           <Property Name="Barcode" Type="varchar" MaxLength="50" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Weight" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ProductLocation">
           <Key>
@@ -359,6 +360,7 @@
           <NavigationProperty Name="ProductSuppliers" Relationship="StoreModel.FK_ProductSupplier_Product" FromRole="Product" ToRole="ProductSupplier" />
           <NavigationProperty Name="Transfers" Relationship="StoreModel.FK_Transfer_Product" FromRole="Product" ToRole="Transfer" />
           <NavigationProperty Name="ProductLocations1" Relationship="StoreModel.FK_Product_ProductLocation" FromRole="Product" ToRole="ProductLocation" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           </EntityType>
         <EntityType Name="ProductLocation">
           <Key>
@@ -684,6 +686,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="StoreModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Barcode" ColumnName="Barcode" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

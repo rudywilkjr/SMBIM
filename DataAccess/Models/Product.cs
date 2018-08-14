@@ -28,6 +28,7 @@ namespace DataAccess.Models
         public string Barcode { get; set; }
         public string Name { get; set; }
         public decimal Weight { get; set; }
+        public bool IsActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InvoiceProduct> InvoiceProducts { get; set; }

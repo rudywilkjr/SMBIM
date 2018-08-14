@@ -9,9 +9,9 @@ namespace InventoryManagerService.Inventory
     {
         private readonly ProductRepository _productRepository = new ProductRepository();
 
-        public List<ProductDto> GetProductItems(string searchText)
+        public List<ProductDto> GetProductItems(string searchText, bool includeDisabledProducts = false)
         {
-            return _productRepository.GetProducts(searchText);
+            return _productRepository.GetProducts(searchText, includeDisabledProducts);
         }
 
         public ProductDto GetProductItem(int productItemId = 0, string itemBarcode = null)
@@ -51,9 +51,9 @@ namespace InventoryManagerService.Inventory
             return _productRepository.CreateProduct(item);
         }
 
-        public bool DeleteProductItem(int inventoryItemId)
+        public void DeleteProductItem(int inventoryItemId)
         {
-            return _productRepository.DeleteProduct(inventoryItemId);
+            _productRepository.DeleteProduct(inventoryItemId);
         }
     }
 }

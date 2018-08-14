@@ -7,13 +7,17 @@ namespace DataAccess.Repositories
 {
     public class ProductRepository
     {
-        public List<ProductDto> GetProducts(string searchText)
+        public List<ProductDto> GetProducts(string searchText, bool includeDisabledProducts)
         {
             List<Product> productItems;
             using (var ctx = new StoreEntities())
             {
                 var query = ctx.Products.AsQueryable();
 
+                if (!includeDisabledProducts)
+                {
+                    query = query.Where(x => x.IsActive == true);
+                }
                 if (!string.IsNullOrEmpty(searchText))
                 {
                     query = query.Where(x => x.Name.Contains(searchText) || x.Barcode.Contains(searchText));
@@ -56,7 +60,8 @@ namespace DataAccess.Repositories
                 {
                     Barcode = product.Barcode,
                     Name = product.Name,
-                    Weight = product.Weight
+                    Weight = product.Weight,
+                    IsActive = true
                 };
 
                 ctx.Products.Add(productItem);
@@ -82,17 +87,15 @@ namespace DataAccess.Repositories
             return AutoMapper.Mapper.Map<ProductDto>(productItem);
         }
 
-        public bool DeleteProduct(int id)
+        public void DeleteProduct(int id)
         {
             using (var ctx = new StoreEntities())
             {
                 var productItem = ctx.Products.Single(x => x.Id == id);
-                ctx.Products.Remove(productItem);
+                productItem.IsActive = false;
 
                 ctx.SaveChanges();
             }
-
-            return true;
         }
 
         public List<LocationsWithProductDto> GetInternalLocationsWithProduct(int inventoryId = 0, int locationId = 0)

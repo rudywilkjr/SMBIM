@@ -12,5 +12,6 @@ namespace DataAccess.DTO
         public string Barcode { get; set; }
         public string Name { get; set; }
         public decimal Weight { get; set; }
+        public Boolean IsActive { get; set; }
     }
 }
