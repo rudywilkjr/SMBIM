@@ -59,8 +59,7 @@
             <tr>
                 <th style="text-align: center">Location</th>
                 <th style="text-align: center">On Hand</th>
-                <th style="text-align: center"></th>
-                <th style="text-align: center"></th>
+                <th class="transferHeader"></th>
             </tr>
             </thead>
             <tbody>
@@ -70,8 +69,10 @@
                 <tr class="highlightable-row">
                     <td>@l.LocationDescription</td>
                     <td>@l.QuantityOnHand</td>
-                    <td><button id="Move" type="button" class="btn btn-link" onclick="Move(@l.ProductId, @l.LocationId)">Move</button></td>
-                    <td><button id="Ship" type="button" class="btn btn-link" onclick="Ship(@l.ProductId, @l.LocationId)">Ship</button></td>
+                    <td>
+                        <button id="Move" type="button" class="btn btn-link" onclick="Move(@l.ProductId, @l.LocationId)">Move</button>
+                        <button id="Ship" type="button" class="btn btn-link" onclick="Ship(@l.ProductId, @l.LocationId)">Ship</button>
+                    </td>
                 </tr>
             }
             </tbody>

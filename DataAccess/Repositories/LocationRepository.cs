@@ -105,12 +105,12 @@ namespace DataAccess.Repositories
             using (var ctx = new StoreEntities())
             {
                 items = (from il in ctx.ProductLocations
-                         join i in ctx.Products on il.InventoryId equals i.Id
+                         join i in ctx.Products on il.ProductId equals i.Id
                     join l in ctx.Locations on il.LocationId equals l.Id
                     where il.LocationId == locationId
                     select new LocationsWithProductDto
                     {
-                        ProductId = il.InventoryId,
+                        ProductId = il.ProductId,
                         ProductName = i.Name,
                         LocationId = il.LocationId,
                         LocationDescription = l.Description,

@@ -101,12 +101,12 @@ namespace DataAccess.Repositories
             using (var ctx = new StoreEntities())
             {
                 var query = (from il in ctx.ProductLocations
-                         join i in ctx.Products on il.InventoryId equals i.Id
+                         join i in ctx.Products on il.ProductId equals i.Id
                          join l in ctx.Locations on il.LocationId equals l.Id
-                         where l.LocationType.Description == "Internal"
+                         where l.LocationType.Description == "Warehouse"
                          select new LocationsWithProductDto
                          {
-                             ProductId = il.InventoryId,
+                             ProductId = il.ProductId,
                              ProductName = i.Name,
                              LocationId = il.LocationId,
                              LocationDescription = l.Description,
@@ -133,11 +133,11 @@ namespace DataAccess.Repositories
             using (var ctx = new StoreEntities())
             {
                 var query = (from il in ctx.ProductLocations
-                             join i in ctx.Products on il.InventoryId equals i.Id
+                             join i in ctx.Products on il.ProductId equals i.Id
                              join l in ctx.Locations on il.LocationId equals l.Id
                              select new LocationsWithProductDto
                              {
-                                 ProductId = il.InventoryId,
+                                 ProductId = il.ProductId,
                                  ProductName = i.Name,
                                  LocationId = il.LocationId,
                                  LocationDescription = l.Description,

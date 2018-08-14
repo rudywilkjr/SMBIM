@@ -123,3 +123,10 @@
     width:auto;
     margin:auto;
 }
+
+.transferHeader {
+    background-image: url('images/transfer.png');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}

@@ -110,6 +110,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\StoreModel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Supplier.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
@@ -130,7 +135,7 @@
     <None Include="App.config" />
     <EntityDeploy Include="Models\StoreModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StoreModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>StoreModel1.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Models\StoreModel.edmx.diagram">
       <DependentUpon>StoreModel.edmx</DependentUpon>

@@ -33,7 +33,7 @@ namespace InventoryManagerService.Transfer
         {
             foreach (var product in products)
             {
-                TransferOut(product.Id, leavingLocationId, arrivingLocationId, quantity);
+                Transfer(product.Id, leavingLocationId, arrivingLocationId, quantity);
             }
         }
 
@@ -60,63 +60,11 @@ namespace InventoryManagerService.Transfer
             
         }
 
-        public void TransferOut(int productId, int leavingLocationId, int arrivingLocationId, int quantity)
+        public void Transfer(int productId, int sourceLocationId, int destinationLocationId, int quantity)
         {
             var productItem = _inventoryRepository.GetProduct(productId);
-            var originalLocationItem = _locationRepository.GetLocation(leavingLocationId);
-            var newLocationItem = _locationRepository.GetLocation(arrivingLocationId);
-            LocationsWithProductDto inventoryAtSourceLocation;
-            LocationsWithProductDto inventoryAtDestinationLocation;
-            try
-            {
-                if (originalLocationItem.LocationType.Description == "Internal")
-                {
-                    inventoryAtSourceLocation =
-                        _inventoryRepository.GetInternalLocationsWithProduct(productId, leavingLocationId).Single();
-                }
-                else
-                {
-                    inventoryAtSourceLocation = new LocationsWithProductDto
-                    {
-                        ProductId = productId,
-                        ProductName = _inventoryRepository.GetProduct(productId).Name,
-                        LocationDescription = originalLocationItem.Description,
-                        LocationId = originalLocationItem.Id,
-                        QuantityOnHand = null
-                    };
-                }
-                
-            }
-            catch (ArgumentNullException)
-            {
-                throw new ApplicationException("No inventory found at this location.");
-            }
-            catch (Exception)
-            {
-                throw new ApplicationException("General error retrieving inventory at location.");
-            }
-            if (inventoryAtSourceLocation.QuantityOnHand < quantity)
-            {
-                throw new ApplicationException("Insufficient inventory at source location to fulfill this transfer.");
-            }
-
-            try
-            {
-                inventoryAtDestinationLocation =
-                    _inventoryRepository.GetInternalAndExternalLocationsWithProduct(productId, arrivingLocationId).Single();
-            }
-            catch (InvalidOperationException)
-            {
-                inventoryAtDestinationLocation = new LocationsWithProductDto
-                {
-                    ProductId = productItem.Id,
-                    LocationId = arrivingLocationId
-                };
-            }
-            catch (Exception)
-            {
-                throw new ApplicationException("General error retrieving inventory at location.");
-            }
+            var originalLocationItem = _locationRepository.GetLocation(sourceLocationId);
+            var newLocationItem = _locationRepository.GetLocation(destinationLocationId);
 
             if (productItem == null)
             {
@@ -133,65 +81,12 @@ namespace InventoryManagerService.Transfer
                 throw new ApplicationException("Destination location not found.");
             }
 
-            var incomingTransfer = new TransferDto
-            {
-                ActivityTime = DateTimeOffset.Now,
-                ProductId = productItem.Id,
-                DestinationLocationId = newLocationItem.Id,
-                SourceLocationId = originalLocationItem.Id,
-                OriginalQuantity = inventoryAtDestinationLocation.QuantityOnHand.GetValueOrDefault(),
-                NewQuantity = inventoryAtDestinationLocation.QuantityOnHand.GetValueOrDefault() + quantity
-            };
-
-            var outgoingTransfer = new TransferDto
-            {
-                ActivityTime = DateTimeOffset.Now,
-                ProductId = productItem.Id,
-                SourceLocationId = originalLocationItem.Id,
-                DestinationLocationId = newLocationItem.Id,
-                OriginalQuantity = inventoryAtSourceLocation.QuantityOnHand.GetValueOrDefault(),
-                NewQuantity = inventoryAtSourceLocation.QuantityOnHand.GetValueOrDefault() - quantity
-            };
-
             try
             {
-                switch (originalLocationItem.LocationType.Description)
-                {
-                    case "Internal":
-                        incomingTransfer = _transferRepository.CreateTransfer(incomingTransfer);
-                        outgoingTransfer = _transferRepository.CreateTransfer(outgoingTransfer);
-                        _transferRepository.UpdateInventoryAtLocation(inventoryAtSourceLocation.ProductId,
-                            inventoryAtSourceLocation.LocationId, inventoryAtSourceLocation.QuantityOnHand.GetValueOrDefault() - quantity);
-                        break;
-                    default:
-                        incomingTransfer = _transferRepository.CreateTransfer(incomingTransfer);
-                        break;
-                }
-
-
-                if (inventoryAtDestinationLocation.ProductName == null)
-                {
-                    _transferRepository.CreateInventoryAtLocation(inventoryAtDestinationLocation.ProductId,
-                        inventoryAtDestinationLocation.LocationId,
-                        quantity);
-                }
-                else
-                {
-                    _transferRepository.UpdateInventoryAtLocation(inventoryAtDestinationLocation.ProductId,
-                        inventoryAtDestinationLocation.LocationId, inventoryAtDestinationLocation.QuantityOnHand.GetValueOrDefault() + quantity);
-                }
-
+                _transferRepository.CreateTransfer(productId, sourceLocationId, destinationLocationId, quantity);
             }
             catch (Exception e)
             {
-                if (incomingTransfer.Id > 0)
-                {
-                    _transferRepository.DeleteTransfer(incomingTransfer.Id);
-                }
-                if (outgoingTransfer.Id > 0)
-                {
-                    _transferRepository.DeleteTransfer(outgoingTransfer.Id);
-                }
                 throw new ApplicationException("Transfer reverted. Please validate and try again.");
             }
 

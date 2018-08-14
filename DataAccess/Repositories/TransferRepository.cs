@@ -54,7 +54,7 @@ namespace DataAccess.Repositories
             return AutoMapper.Mapper.Map<List<TransferDto>>(transferItems);
         }
 
-        public TransferDto CreateTransfer(TransferDto transfer)
+        public TransferDto CreateTransfer(int productId, int sourceLocationId, int destinationLocationId, int quantity)
         {
             Transfer transferItem;
             using (var ctx = new StoreEntities())
@@ -62,14 +62,32 @@ namespace DataAccess.Repositories
                 transferItem = new Transfer
                 {
                     ActivityTime = DateTimeOffset.Now,
-                    SourceLocationId = transfer.SourceLocationId,
-                    DestinationLocationId = transfer.DestinationLocationId,
-                    ProductId = transfer.ProductId,
-                    OriginalQuantity = transfer.OriginalQuantity,
-                    NewQuantity = transfer.NewQuantity
+                    SourceLocationId = sourceLocationId,
+                    DestinationLocationId = destinationLocationId,
+                    ProductId = productId,
+                    Quantity = quantity
                 };
 
                 ctx.Transfers.Add(transferItem);
+
+                var productLocation = ctx.ProductLocations.SingleOrDefault(x => x.ProductId == productId && x.LocationId == destinationLocationId);
+
+                if (productLocation != null)
+                {
+                    productLocation.OnHand += quantity;
+                }
+                else
+                {
+                    productLocation = new ProductLocation
+                    {
+                        ProductId = productId,
+                        LocationId = destinationLocationId,
+                        OnHand = quantity
+                    };
+
+                    ctx.ProductLocations.Add(productLocation);
+                }
+
                 ctx.SaveChanges();
             }
 
@@ -97,37 +115,6 @@ namespace DataAccess.Repositories
             }
         }
 
-        public bool CreateInventoryAtLocation(int inventoryId, int locationId, int quantity)
-        {
-            using (var ctx = new StoreEntities())
-            {
-                var inventoryLocation = new ProductLocation
-                {
-                    InventoryId = inventoryId,
-                    LocationId = locationId,
-                    OnHand = quantity
-                };
-
-                ctx.ProductLocations.Add(inventoryLocation);
-                ctx.SaveChanges();
-            }
-            return true;
-        }
-
-        public bool UpdateInventoryAtLocation(int inventoryId, int locationId, int quantity)
-        {
-            using (var ctx = new StoreEntities())
-            {
-                var inventoryLocation =
-                    ctx.ProductLocations.Single(x => x.InventoryId == inventoryId && x.LocationId == locationId);
-
-                inventoryLocation.OnHand = quantity;
-
-                ctx.SaveChanges();
-            }
-            return true;
-        }
-
         public void ReceiveInvoiceInventory(int invoiceProductId, int sourceLocationId, int destinationLocationId, short quantity)
         {
             using (var ctx = new StoreEntities())
@@ -138,15 +125,7 @@ namespace DataAccess.Repositories
 
                 if (originalQuantity != invoiceProduct.ReceivedQuantity)
                 {
-                    CreateTransfer(new TransferDto
-                    {
-                        ActivityTime = DateTimeOffset.Now,
-                        ProductId = invoiceProduct.ProductId,
-                        SourceLocationId = sourceLocationId,
-                        DestinationLocationId = destinationLocationId,
-                        OriginalQuantity = originalQuantity,
-                        NewQuantity = invoiceProduct.ReceivedQuantity
-                    });
+                    CreateTransfer(invoiceProduct.ProductId, sourceLocationId, destinationLocationId, quantity);
 
                     ctx.SaveChanges();
                 }

@@ -8,7 +8,7 @@ namespace DataAccess.DTO
 {
     public class ProductLocationDto
     {
-        public int InventoryId { get; set; }
+        public int ProductId { get; set; }
         public int LocationId { get; set; }
         public Nullable<int> OnHand { get; set; }
 

@@ -14,11 +14,11 @@ namespace DataAccess.Models
     
     public partial class ProductLocation
     {
-        public int InventoryId { get; set; }
+        public int ProductId { get; set; }
         public int LocationId { get; set; }
         public Nullable<int> OnHand { get; set; }
     
-        public virtual Location Location { get; set; }
         public virtual Product Product { get; set; }
+        public virtual Product Product1 { get; set; }
     }
 }

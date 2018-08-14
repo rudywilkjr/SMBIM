@@ -27,6 +27,7 @@
         <AssociationConnector Association="StoreModel.FK_Transfer_Location_1" />
         <AssociationConnector Association="StoreModel.FK_Transfer_Location_2" />
         <AssociationConnector Association="StoreModel.FK_Transfer_Product" />
+        <AssociationConnector Association="StoreModel.FK_Product_ProductLocation" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

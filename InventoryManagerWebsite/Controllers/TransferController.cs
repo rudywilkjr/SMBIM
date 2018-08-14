@@ -79,34 +79,34 @@ namespace InventoryManagerWebsite.Controllers
         [Route("Receive")]
         public ActionResult Receive(ReceiveInvoiceViewModel model)
         {
-            try
+            foreach(var product in model.SelectedInvoice.InvoiceProducts)
             {
-                foreach(var product in model.SelectedInvoice.InvoiceProducts)
+                try
                 {
-                    try
+                    if (product.ReceivedQuantity != _invoiceService.GetInvoiceProduct(product.Id).ReceivedQuantity)
                     {
-                        if (product.ReceivedQuantity != _invoiceService.GetInvoiceProduct(product.Id).ReceivedQuantity)
-                        {
-                            _transferService.ReceiveInvoiceProduct(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity);
-                            product.IsSynced = true;
-                            product.SyncMessage = "Update saved successfully.";
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        product.IsSynced = false;
-                        product.SyncMessage = e.Message;
+                        _transferService.ReceiveInvoiceProduct(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity);
+                        product.IsSynced = true;
+                        product.SyncMessage = "Update saved successfully.";
                     }
                 }
+                catch (Exception e)
+                {
+                    product.IsSynced = false;
+                    product.SyncMessage = e.Message;
+                }
             }
-            catch (Exception e)
+            
+            if (!model.SelectedInvoice.InvoiceProducts.Any(x => x.IsSynced == false))
+            {
+                TempData["ToastType"] = "Success";
+                TempData["Toast"] = "Invoice ID " + model.SelectedInvoice.Id + " Saved Successfully.";
+            } else
             {
                 TempData["Toast"] = "Invoice ID " + model.SelectedInvoice.Id + " Not Saved Successfully.";
                 TempData["ToastType"] = "Error";
             }
 
-            TempData["ToastType"] = "Success";
-            TempData["Toast"] = "Invoice ID " + model.SelectedInvoice.Id + " Saved Successfully.";
 
             model.Locations = _locationService.GetLocations(3);
             return View("Invoice", model);

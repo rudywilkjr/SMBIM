@@ -13,8 +13,7 @@ namespace DataAccess.DTO
         public int ProductId { get; set; }
         public int SourceLocationId { get; set; }
         public int DestinationLocationId { get; set; }
-        public int OriginalQuantity { get; set; }
-        public int NewQuantity { get; set; }
+        public int Quantity { get; set; }
 
         public virtual LocationDto DestinationLocation { get; set; }
         public virtual LocationDto SourceLocation { get; set; }

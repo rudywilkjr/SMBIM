@@ -51,10 +51,10 @@
         </EntityType>
         <EntityType Name="ProductLocation">
           <Key>
-            <PropertyRef Name="InventoryId" />
+            <PropertyRef Name="ProductId" />
             <PropertyRef Name="LocationId" />
           </Key>
-          <Property Name="InventoryId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="LocationId" Type="int" Nullable="false" />
           <Property Name="OnHand" Type="int" />
         </EntityType>
@@ -92,8 +92,7 @@
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="SourceLocationId" Type="int" Nullable="false" />
           <Property Name="DestinationLocationId" Type="int" Nullable="false" />
-          <Property Name="OriginalQuantity" Type="int" Nullable="false" />
-          <Property Name="NewQuantity" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK__Location__Type__49C3F6B7">
           <End Role="LocationType" Type="Self.LocationType" Multiplicity="1" />
@@ -143,7 +142,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Location_InventoryLocation">
+        <Association Name="FK_Location_ProductLocation">
           <End Role="Location" Type="Self.Location" Multiplicity="1" />
           <End Role="ProductLocation" Type="Self.ProductLocation" Multiplicity="*" />
           <ReferentialConstraint>
@@ -155,7 +154,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Product_InventoryLocation">
+        <Association Name="FK_Product_ProductLocation">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="ProductLocation" Type="Self.ProductLocation" Multiplicity="*" />
           <ReferentialConstraint>
@@ -163,7 +162,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ProductLocation">
-              <PropertyRef Name="InventoryId" />
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -266,11 +265,11 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="InvoiceProduct" EntitySet="InvoiceProduct" />
           </AssociationSet>
-          <AssociationSet Name="FK_Location_InventoryLocation" Association="Self.FK_Location_InventoryLocation">
+          <AssociationSet Name="FK_Location_ProductLocation" Association="Self.FK_Location_ProductLocation">
             <End Role="Location" EntitySet="Location" />
             <End Role="ProductLocation" EntitySet="ProductLocation" />
           </AssociationSet>
-          <AssociationSet Name="FK_Product_InventoryLocation" Association="Self.FK_Product_InventoryLocation">
+          <AssociationSet Name="FK_Product_ProductLocation" Association="Self.FK_Product_ProductLocation">
             <End Role="Product" EntitySet="Product" />
             <End Role="ProductLocation" EntitySet="ProductLocation" />
           </AssociationSet>
@@ -359,17 +358,18 @@
           <NavigationProperty Name="ProductLocations" Relationship="Self.FK_Product_InventoryLocation" FromRole="Product" ToRole="ProductLocation" />
           <NavigationProperty Name="ProductSuppliers" Relationship="StoreModel.FK_ProductSupplier_Product" FromRole="Product" ToRole="ProductSupplier" />
           <NavigationProperty Name="Transfers" Relationship="StoreModel.FK_Transfer_Product" FromRole="Product" ToRole="Transfer" />
+          <NavigationProperty Name="ProductLocations1" Relationship="StoreModel.FK_Product_ProductLocation" FromRole="Product" ToRole="ProductLocation" />
           </EntityType>
         <EntityType Name="ProductLocation">
           <Key>
-            <PropertyRef Name="InventoryId" />
             <PropertyRef Name="LocationId" />
+            <PropertyRef Name="ProductId" />
           </Key>
-          <Property Name="InventoryId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="LocationId" Type="Int32" Nullable="false" />
           <Property Name="OnHand" Type="Int32" />
-          <NavigationProperty Name="Location" Relationship="Self.FK_Location_InventoryLocation" FromRole="ProductLocation" ToRole="Location" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_Product_InventoryLocation" FromRole="ProductLocation" ToRole="Product" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Product_ProductLocation" FromRole="ProductLocation" ToRole="Product" />
+          <NavigationProperty Name="Product1" Relationship="StoreModel.FK_Product_ProductLocation" FromRole="ProductLocation" ToRole="Product" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -451,7 +451,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ProductLocation">
-              <PropertyRef Name="InventoryId" />
+              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -513,6 +513,10 @@
           <AssociationSet Name="FK_Transfer_Product" Association="StoreModel.FK_Transfer_Product">
             <End Role="Product" EntitySet="Products" />
             <End Role="Transfer" EntitySet="Transfers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductLocation" Association="StoreModel.FK_Product_ProductLocation">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="ProductLocation" EntitySet="ProductLocations" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ProductSupplier">
@@ -579,11 +583,10 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="SourceLocationId" Type="Int32" Nullable="false" />
           <Property Name="DestinationLocationId" Type="Int32" Nullable="false" />
-          <Property Name="OriginalQuantity" Type="Int32" Nullable="false" />
-          <Property Name="NewQuantity" Type="Int32" Nullable="false" />
           <NavigationProperty Name="DestinationLocation" Relationship="StoreModel.FK_Transfer_Location_1" FromRole="Transfer" ToRole="Location" />
           <NavigationProperty Name="SourceLocation" Relationship="StoreModel.FK_Transfer_Location_2" FromRole="Transfer" ToRole="Location" />
           <NavigationProperty Name="Product" Relationship="StoreModel.FK_Transfer_Product" FromRole="Transfer" ToRole="Product" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_Transfer_Location_1">
           <End Type="StoreModel.Location" Role="Location" Multiplicity="1" />
@@ -617,6 +620,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Transfer">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductLocation">
+          <End Type="StoreModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="StoreModel.ProductLocation" Role="ProductLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductLocation">
               <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
@@ -679,7 +694,7 @@
           <EntitySetMapping Name="ProductLocations">
             <EntityTypeMapping TypeName="StoreModel.ProductLocation">
               <MappingFragment StoreEntitySet="ProductLocation">
-                <ScalarProperty Name="InventoryId" ColumnName="InventoryId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="OnHand" ColumnName="OnHand" />
               </MappingFragment>
@@ -716,8 +731,7 @@
           <EntitySetMapping Name="Transfers">
             <EntityTypeMapping TypeName="StoreModel.Transfer">
               <MappingFragment StoreEntitySet="Transfer">
-                <ScalarProperty Name="NewQuantity" ColumnName="NewQuantity" />
-                <ScalarProperty Name="OriginalQuantity" ColumnName="OriginalQuantity" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="DestinationLocationId" ColumnName="DestinationLocationId" />
                 <ScalarProperty Name="SourceLocationId" ColumnName="SourceLocationId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
