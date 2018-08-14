@@ -12,8 +12,6 @@ namespace InventoryManagerWebsite.Models.Product
         public string LookupItemName { get; set; }
 
         public List<LocationsWithProductDto> Locations { get; set; }
-
-        public bool? SaveSuccessful { get; set; }
     }
 
     public class ProductLookupModel

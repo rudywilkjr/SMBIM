@@ -5,39 +5,34 @@
 }
 
 <div class="container" style="width: 500px; text-align: center">
-    <form id="inventory-item-form">
+    @using (Html.BeginForm("Save", "Product", FormMethod.Post))
+    {
         @Html.HiddenFor(x => x.ProductItem.Id)
         <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px">
             Inventory Management
         </div>
-        @if (Model.ProductItem.Id == 0)
+        if (Model.ProductItem == null || Model.ProductItem.Id == 0)
         {
             <div class="row" style="font-size: large; font-weight: bold; margin-bottom: 25px">
                 Create New Product
             </div>
         }
-        @if (Model.SaveSuccessful.GetValueOrDefault())
-        {
-            <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px; background-color: lightgreen; margin-top: 25px;">
-                Product Updated Successfully
-            </div>
-        }
         <div class="row">
             <div class="col-sm-12 form-group" style="text-align: center">
                 @Html.LabelFor(x => x.ProductItem.Name)
-                @Html.TextBoxFor(x => x.ProductItem.Name, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+                @Html.TextBoxFor(x => x.ProductItem.Name, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" }, { "required", "required" } })
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 form-group" style="text-align: center">
                 @Html.LabelFor(x => x.ProductItem.Barcode)
-                @Html.TextBoxFor(x => x.ProductItem.Barcode, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+                @Html.TextBoxFor(x => x.ProductItem.Barcode, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" }, { "required", "required" } })
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 form-group" style="text-align: center">
                 @Html.LabelFor(x => x.ProductItem.Weight)
-                @Html.TextBoxFor(x => x.ProductItem.Weight, new Dictionary<string, object> { { "style", "width:100%" }, { "class", "form-control input-lg" } })
+                @Html.TextBoxFor(x => x.ProductItem.Weight, "{0:n}", new { @class = "form-control input-lg", style = "width:100%", type = "number", step = "0.01" })
             </div>
         </div>
         <div class="row">
@@ -45,10 +40,11 @@
                 <button id="Cancel" type="button" class="btn btn-info" onclick="CancelProductItem()">Go Back</button>
             </div>
             <div class="col-sm-6" style="width: 50%">
-                <button id="Save" type="button" class="btn btn-primary" onclick="SaveProductItem()">Update</button>
+                <button id="Save" type="submit" class="btn btn-primary" onclick="SaveProductItem()">Save</button>
             </div>
         </div>
-    </form>
+    }
+
 
 </div>
 <hr style="width: 100%" />
@@ -82,7 +78,7 @@
         </table>
     </div>
 }
-else
+else if(Model.ProductItem != null && Model.ProductItem.Id > 0)
 {
     <div style="text-align: center; margin-top: 25px; font-size: large">
         <table class="table">
@@ -106,5 +102,5 @@ else
 
 @section Scripts
 {
-    <script src="~/Scripts/Product/item.js"></script>
+    <script src="~/Scripts/Product/item.js?v=1"></script>
 }

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using DataAccess.DTO;
 using InventoryManagerService.Inventory;
 using InventoryManagerWebsite.Models.Product;
@@ -41,13 +42,8 @@ namespace InventoryManagerWebsite.Controllers
         }
 
         [Route("Item/New")]
-        public ActionResult New()
+        public ActionResult New(ProductModel model)
         {
-            var model = new ProductModel
-            {
-                ProductItem = new ProductDto()
-            };
-
             return View("Item", model);
         }
 
@@ -67,10 +63,20 @@ namespace InventoryManagerWebsite.Controllers
         [HttpPost]
         public ActionResult Save(ProductModel model)
         {
-            model.ProductItem = _productService.UpdateProductItem(model.ProductItem);
-            model.SaveSuccessful = true;
-            model.Locations = _productService.GetLocationsWithProduct(model.ProductItem.Id);
-            return View("Item", model);
+            try
+            {
+                model.ProductItem = _productService.UpdateProductItem(model.ProductItem);
+                TempData["ToastType"] = "Success";
+                TempData["Toast"] = "New Product Saved Successfully.";
+            }
+            catch (Exception e)
+            {
+                TempData["ToastType"] = "Error";
+                TempData["Toast"] = e.Message;
+                return New(model);
+            }
+            
+            return Lookup(new ProductLookupModel { SearchText = model.ProductItem.Name });
         }
 
     }

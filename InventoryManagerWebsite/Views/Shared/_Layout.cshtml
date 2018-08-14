@@ -17,7 +17,15 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">@Html.ActionLink("Products", "Index", "Product", null, new { @class = "nav-link" })</li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarProductRoot" role="button" data-toggle="dropdown">
+                        Products
+                    </a>
+                    <div class="dropdown-menu">
+                        @Html.ActionLink("Product Search", "Lookup", "Product", null, new { @class = "dropdown-item" })
+                        @Html.ActionLink("New Product", "New", "Product", null, new { @class = "dropdown-item" })
+                    </div>
+                </li>
                 <li class="nav-item">@Html.ActionLink("Purchase Orders", "Index", "PurchaseOrder", null, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Receiving", "Search", "Transfer", null, new { @class = "nav-link" })</li>
                 <li class="nav-item">@Html.ActionLink("Product Reporting", "Product", "Report", null, new { @class = "nav-link" })</li>
@@ -36,11 +44,11 @@
     @RenderSection("scripts", required: false)
     @if ((string)TempData["ToastType"] == "Success")
     {
-        <script>toastr["success"]("@TempData["Toast"]")</script>
+        <script type="text/javascript">toastr["success"]("@TempData["Toast"]")</script>
     }
     else if((string) TempData["ToastType"] == "Error")
     {
-        <script>toastr["error"]("@TempData["Toast"]")</script>
+        <script type="text/javascript">toastr["error"]("@TempData["Toast"]")</script>
     }
 </body>
 </html>

@@ -123,7 +123,7 @@ function renumberNameSequence() {
             if (thisIndex - lastIndex > 1) {
                 $(this).attr("name", $(this)[0].name.replace("[" + thisIndex + "]", "[" + (lastIndex + 1) + "]"));
             }
-            if (currentSet != thisIndex) { lastIndex = thisIndex; }
+            if (currentSet !== thisIndex) { lastIndex = thisIndex; }
         });
 
 }

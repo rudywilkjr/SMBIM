@@ -1,16 +1,4 @@
-﻿function SaveInventoryItem() {
-    $.ajax({
-        url: "/Product/Item/Update",
-        type: "POST",
-        dataType: 'html',
-        data: $("#inventory-item-form").serialize(),
-        success: function (html) {
-            $('#siteContentContainer').html(html);
-        }
-    });
-}
-
-function CancelInventoryItem() {
+﻿function CancelInventoryItem() {
     window.open("/Product/", "_self");
 }
 

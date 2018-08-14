@@ -41,6 +41,8 @@ namespace InventoryManagerService.Inventory
 
         public ProductDto UpdateProductItem(ProductDto item)
         {
+            if (String.IsNullOrEmpty(item.Name)) throw new ApplicationException("Invalid Item. Missing Name.");
+            if (String.IsNullOrEmpty(item.Barcode)) throw new ApplicationException("Invalid Item. Missing Barcode.");
             return item.Id > 0 ? _productRepository.UpdateProduct(item) : _productRepository.CreateProduct(item);
         }
 
