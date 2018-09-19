@@ -3,30 +3,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Repositories;
+using InventoryManagerService.Interface;
 
 namespace InventoryManagerService.Transfer
 {
-    public class TransferService
+    public class TransferService : ITransferService
     {
-        private readonly TransferRepository _transferRepository = new TransferRepository();
-        private readonly ProductRepository _inventoryRepository = new ProductRepository();
-        private readonly LocationRepository _locationRepository = new LocationRepository();
-        private readonly InvoiceRepository _invoiceRepository = new InvoiceRepository();
+        private readonly ITransferRepository transferRepository;
+        private readonly IProductRepository productRepository;
+        private readonly ILocationRepository locationRepository;
+        private readonly IInvoiceRepository invoiceRepository;
+
+        public TransferService(ITransferRepository transferRepository, IProductRepository productRepository, ILocationRepository locationRepository, IInvoiceRepository invoiceRepository)
+        {
+            this.transferRepository = transferRepository;
+            this.productRepository = productRepository;
+            this.locationRepository = locationRepository;
+            this.invoiceRepository = invoiceRepository;
+        }
 
         public TransferDto GetTransfer(int transferId)
         {
-            return _transferRepository.GetTransfer(transferId);
+            return transferRepository.GetTransfer(transferId);
         }
 
         public List<TransferDto> GetAllTransfers()
         {
-            return _transferRepository.GetTransfers();
+            return transferRepository.GetTransfers();
         }
 
         public List<TransferDto> GetTransfers(DateTimeOffset? beginDate, DateTimeOffset? endDate)
         {
-            return _transferRepository.GetTransfers(beginDate, endDate);
+            return transferRepository.GetTransfers(beginDate, endDate);
         }
 
         public void TransferOutProducts(List<InvoiceProductDto> products, int leavingLocationId, int arrivingLocationId, int quantity)
@@ -41,17 +51,17 @@ namespace InventoryManagerService.Transfer
         {
             try
             {
-                if (_locationRepository.GetLocation(sourceLocationId) == null)
+                if (locationRepository.GetLocation(sourceLocationId) == null)
                 {
                     throw new ApplicationException("Invalid source location.");
                 }
 
-                if (_locationRepository.GetLocation(destinationLocationId) == null)
+                if (locationRepository.GetLocation(destinationLocationId) == null)
                 {
                     throw new ApplicationException("Invalid destination location.");
                 }
 
-                _transferRepository.ReceiveInvoiceInventory(invoiceProductId, sourceLocationId, destinationLocationId, quantity);
+                transferRepository.ReceiveInvoiceInventory(invoiceProductId, sourceLocationId, destinationLocationId, quantity);
             }
             catch(Exception e)
             {
@@ -62,9 +72,9 @@ namespace InventoryManagerService.Transfer
 
         public void Transfer(int productId, int sourceLocationId, int destinationLocationId, int quantity)
         {
-            var productItem = _inventoryRepository.GetProduct(productId);
-            var originalLocationItem = _locationRepository.GetLocation(sourceLocationId);
-            var newLocationItem = _locationRepository.GetLocation(destinationLocationId);
+            var productItem = productRepository.GetProduct(productId);
+            var originalLocationItem = locationRepository.GetLocation(sourceLocationId);
+            var newLocationItem = locationRepository.GetLocation(destinationLocationId);
 
             if (productItem == null)
             {
@@ -83,7 +93,7 @@ namespace InventoryManagerService.Transfer
 
             try
             {
-                _transferRepository.CreateTransfer(productId, sourceLocationId, destinationLocationId, quantity);
+                transferRepository.CreateTransfer(productId, sourceLocationId, destinationLocationId, quantity);
             }
             catch (Exception e)
             {

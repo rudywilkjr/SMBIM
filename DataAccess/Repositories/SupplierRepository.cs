@@ -1,4 +1,5 @@
 ﻿using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class SupplierRepository
+    public class SupplierRepository : ISupplierRepository
     {
         public List<SupplierDto> GetSuppliers(int? supplierTypeId)
         {

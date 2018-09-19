@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Models;
 
 namespace DataAccess.Repositories
 {
-    public class TransferRepository
+    public class TransferRepository : ITransferRepository
     {
         public List<TransferDto> GetTransfers()
         {

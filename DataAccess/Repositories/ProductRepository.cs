@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Models;
 
 namespace DataAccess.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         public List<ProductDto> GetProducts(string searchText, bool includeDisabledProducts)
         {

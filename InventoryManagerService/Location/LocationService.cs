@@ -4,34 +4,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Repositories;
+using InventoryManagerService.Interface;
 
 namespace InventoryManagerService.Location
 {
-    public class LocationService
+    public class LocationService : ILocationService
     {
-        private readonly LocationRepository _locationRepository = new LocationRepository();
+        private readonly ILocationRepository locationRepository;
+
+        public LocationService(ILocationRepository locationRepository)
+        {
+            this.locationRepository = locationRepository;
+        }
 
         public List<LocationDto> GetLocations()
         {
-            return _locationRepository.GetLocations();
+            return locationRepository.GetLocations();
         }
 
         public List<LocationDto> GetLocations(int locationType)
         {
-            return _locationRepository.GetLocations(locationType);
+            return locationRepository.GetLocations(locationType);
         }
 
         public List<LocationDto> GetExternalLocations()
         {
-            return _locationRepository.GetExternalLocations();
+            return locationRepository.GetExternalLocations();
         }
 
         public LocationDto GetLocation(int locationId = 0)
         {
             if (locationId > 0)
             {
-                return _locationRepository.GetLocation(locationId);
+                return locationRepository.GetLocation(locationId);
             }
 
             throw new ApplicationException("Unable to retrieve location. Missing location identifier");
@@ -40,22 +47,22 @@ namespace InventoryManagerService.Location
 
         public List<LocationsWithProductDto> GetInventoryAtLocation(int locationId)
         {
-            return _locationRepository.GetProductsAtLocation(locationId);
+            return locationRepository.GetProductsAtLocation(locationId);
         }
 
         public LocationDto UpdateLocationItem(LocationDto location)
         {
-            return _locationRepository.UpdateLocation(location);
+            return locationRepository.UpdateLocation(location);
         }
 
         public LocationDto CreateLocationItem(LocationDto location)
         {
-            return _locationRepository.CreateLocation(location);
+            return locationRepository.CreateLocation(location);
         }
 
         public bool DeleteLocationItem(int locationId)
         {
-            return _locationRepository.DeleteLocation(locationId);
+            return locationRepository.DeleteLocation(locationId);
         }
     }
 }

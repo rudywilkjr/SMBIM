@@ -1,4 +1,5 @@
 ﻿using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class InvoiceRepository
+    public class InvoiceRepository : IInvoiceRepository
     {
         public InvoiceDto GetInvoice(int invoiceId)
         {

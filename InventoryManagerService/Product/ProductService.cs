@@ -1,28 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataAccess.DTO;
+using DataAccess.Interface;
 using DataAccess.Repositories;
+using InventoryManagerService.Interface;
 
-namespace InventoryManagerService.Inventory
+namespace InventoryManagerService.Product
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-        private readonly ProductRepository _productRepository = new ProductRepository();
+        private readonly IProductRepository productRepository;
+
+        public ProductService(IProductRepository productRepository)
+        {
+            this.productRepository = productRepository;
+        }
 
         public List<ProductDto> GetProductItems(string searchText, bool includeDisabledProducts = false)
         {
-            return _productRepository.GetProducts(searchText, includeDisabledProducts);
+            return productRepository.GetProducts(searchText, includeDisabledProducts);
         }
 
         public ProductDto GetProductItem(int productItemId = 0, string itemBarcode = null)
         {
             if (productItemId > 0)
             {
-                return _productRepository.GetProduct(productItemId);
+                return productRepository.GetProduct(productItemId);
             }
             if (itemBarcode != null)
             {
-                return _productRepository.GetProduct(itemBarcode);
+                return productRepository.GetProduct(itemBarcode);
             }
 
             throw new ApplicationException("Unable to retrieve inventory item. Missing item identifier");
@@ -31,29 +38,29 @@ namespace InventoryManagerService.Inventory
 
         public List<LocationsWithProductDto> GetLocationsWithProduct(int inventoryItemId, int locationId = 0)
         {
-            return _productRepository.GetInternalLocationsWithProduct(inventoryItemId, locationId);
+            return productRepository.GetInternalLocationsWithProduct(inventoryItemId, locationId);
         }
 
         public List<LocationsWithProductDto> GetAllLocationsWithProduct()
         {
-            return _productRepository.GetInternalLocationsWithProduct();
+            return productRepository.GetInternalLocationsWithProduct();
         }
 
         public ProductDto UpdateProductItem(ProductDto item)
         {
             if (String.IsNullOrEmpty(item.Name)) throw new ApplicationException("Invalid Item. Missing Name.");
             if (String.IsNullOrEmpty(item.Barcode)) throw new ApplicationException("Invalid Item. Missing Barcode.");
-            return item.Id > 0 ? _productRepository.UpdateProduct(item) : _productRepository.CreateProduct(item);
+            return item.Id > 0 ? productRepository.UpdateProduct(item) : productRepository.CreateProduct(item);
         }
 
         public ProductDto CreateProductItem(ProductDto item)
         {
-            return _productRepository.CreateProduct(item);
+            return productRepository.CreateProduct(item);
         }
 
         public void DeleteProductItem(int inventoryItemId)
         {
-            _productRepository.DeleteProduct(inventoryItemId);
+            productRepository.DeleteProduct(inventoryItemId);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using DataAccess.DTO;
-using InventoryManagerService.Inventory;
+using InventoryManagerService.Interface;
 using InventoryManagerWebsite.Models.Product;
 
 namespace InventoryManagerWebsite.Controllers
@@ -9,8 +9,12 @@ namespace InventoryManagerWebsite.Controllers
     [RoutePrefix("Product")]
     public class ProductController : Controller
     {
-        private readonly ProductService _productService = new ProductService();
-        //private LocationService _locationService = new LocationService();
+        private readonly IProductService productService;
+
+        public ProductController(IProductService productService)
+        {
+            this.productService = productService;
+        }
 
         public ActionResult Index()
         {
@@ -25,8 +29,8 @@ namespace InventoryManagerWebsite.Controllers
             {
                 model = new ProductModel
                 {
-                    ProductItem = _productService.GetProductItem(id.Value),
-                    Locations = _productService.GetLocationsWithProduct(id.Value)
+                    ProductItem = productService.GetProductItem(id.Value),
+                    Locations = productService.GetLocationsWithProduct(id.Value)
                 };
             }
             else
@@ -52,7 +56,7 @@ namespace InventoryManagerWebsite.Controllers
         {
             var searchedProductsModel = new ProductLookupModel
             {
-                ProductItems = _productService.GetProductItems(searchModel.SearchText, searchModel.includeInactive),
+                ProductItems = productService.GetProductItems(searchModel.SearchText, searchModel.includeInactive),
                 includeInactive = searchModel.includeInactive
             };
             
@@ -66,7 +70,7 @@ namespace InventoryManagerWebsite.Controllers
         {
             try
             {
-                model.ProductItem = _productService.UpdateProductItem(model.ProductItem);
+                model.ProductItem = productService.UpdateProductItem(model.ProductItem);
                 TempData["ToastType"] = "Success";
                 TempData["Toast"] = "New Product Saved Successfully.";
             }
@@ -85,7 +89,7 @@ namespace InventoryManagerWebsite.Controllers
         {
             try
             {
-                _productService.DeleteProductItem(model.ProductItem.Id);
+                productService.DeleteProductItem(model.ProductItem.Id);
                 TempData["ToastType"] = "Success";
                 TempData["Toast"] = "Product Deleted Successfully.";
             }

@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
 using DataAccess.DTO;
-using InventoryManagerService.Inventory;
-using InventoryManagerService.Location;
-using InventoryManagerService.Transfer;
+using InventoryManagerService.Interface;
 using InventoryManagerWebsite.Models.Report;
 
 namespace InventoryManagerWebsite.Controllers
@@ -10,9 +8,16 @@ namespace InventoryManagerWebsite.Controllers
     [RoutePrefix("Report")]
     public class ReportController : Controller
     {
-        private readonly ProductService _productService = new ProductService();
-        private readonly TransferService _transferService = new TransferService();
-        private readonly LocationService _locationService = new LocationService();
+        private readonly IProductService productService;
+        private readonly ITransferService transferService;
+        private readonly ILocationService locationService;
+
+        public ReportController(IProductService productService, ITransferService transferService, ILocationService locationService)
+        {
+            this.productService = productService;
+            this.transferService = transferService;
+            this.locationService = locationService;
+        }
 
         // GET: Report
         public ActionResult Index()
@@ -23,9 +28,9 @@ namespace InventoryManagerWebsite.Controllers
         public ActionResult Product(ProductReportModel model)
         {
 
-            model.Items = _productService.GetLocationsWithProduct(model.SelectedProductId, model.SelectedLocationId);
-            model.Products = _productService.GetProductItems(string.Empty);
-            model.Locations = _locationService.GetLocations(3); //3: Warehouse
+            model.Items = productService.GetLocationsWithProduct(model.SelectedProductId, model.SelectedLocationId);
+            model.Products = productService.GetProductItems(string.Empty);
+            model.Locations = locationService.GetLocations(3); //3: Warehouse
 
             model.Products.Insert(0, new ProductDto { Id = 0, Name = "Select a Product"});
             model.Locations.Insert(0, new LocationDto {Id = 0, Description = "Select a Location"});
@@ -36,7 +41,7 @@ namespace InventoryManagerWebsite.Controllers
         public ActionResult Transfer(TransferReportModel model)
         {
 
-            model.Items = _transferService.GetTransfers(model.SelectedBeginDate, model.SelectedEndDate);
+            model.Items = transferService.GetTransfers(model.SelectedBeginDate, model.SelectedEndDate);
 
             return View("Transfer", model);
         }

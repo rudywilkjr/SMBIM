@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using InventoryManagerService.Inventory;
-using InventoryManagerService.Invoice;
-using InventoryManagerService.Location;
-using InventoryManagerService.Transfer;
+using InventoryManagerService.Interface;
 using InventoryManagerWebsite.Models.Invoice;
 using InventoryManagerWebsite.Models.Transfer;
 
@@ -13,10 +10,18 @@ namespace InventoryManagerWebsite.Controllers
     [RoutePrefix("Transfer")]
     public class TransferController : Controller
     {
-        private readonly ProductService _inventoryService = new ProductService();
-        private readonly LocationService _locationService = new LocationService();
-        private readonly TransferService _transferService = new TransferService();
-        private readonly InvoiceService _invoiceService = new InvoiceService();
+        private readonly IProductService productService;
+        private readonly ILocationService locationService;
+        private readonly ITransferService transferService;
+        private readonly IInvoiceService invoiceService;
+
+        public TransferController(IProductService productService, ILocationService locationService, ITransferService transferService, IInvoiceService invoiceService)
+        {
+            this.productService = productService;
+            this.locationService = locationService;
+            this.transferService = transferService;
+            this.invoiceService = invoiceService;
+        }
 
         [Route("Move/{locationId=locationId}/{inventoryItemId=inventoryItemId}")]
         public ActionResult Move(int inventoryItemId, int locationId)
@@ -24,10 +29,10 @@ namespace InventoryManagerWebsite.Controllers
             var model = new MoveModel
             {
                 ItemsAtLocation =
-                    _inventoryService.GetLocationsWithProduct(inventoryItemId)
+                    productService.GetLocationsWithProduct(inventoryItemId)
                         .Where(x => x.LocationId == locationId)
                         .ToList(),
-                Locations = _locationService.GetLocations(1), //1:Internal
+                Locations = locationService.GetLocations(1), //1:Internal
                 SelectedDepartureLocationId = locationId,
                 SelectedInventoryId = inventoryItemId
             };
@@ -41,10 +46,10 @@ namespace InventoryManagerWebsite.Controllers
             var model = new MoveModel
             {
                 ItemsAtLocation =
-                    _inventoryService.GetLocationsWithProduct(inventoryItemId)
+                    productService.GetLocationsWithProduct(inventoryItemId)
                         .Where(x => x.LocationId == locationId)
                         .ToList(),
-                Locations = _locationService.GetLocations(),
+                Locations = locationService.GetLocations(),
                 SelectedDepartureLocationId = locationId,
                 SelectedInventoryId = inventoryItemId,
                 SelectedArrivingLocationId = 4 //4: Shipped
@@ -58,7 +63,7 @@ namespace InventoryManagerWebsite.Controllers
         {
             var viewModel = new InvoiceSearchViewModel
             {
-                Invoices = _invoiceService.GetInvoices(model.InvoiceSearchText)
+                Invoices = invoiceService.GetInvoices(model.InvoiceSearchText)
             };
             
             return View("Search", viewModel);
@@ -67,11 +72,11 @@ namespace InventoryManagerWebsite.Controllers
         [Route("Invoice/{invoiceId}")]
         public ActionResult Invoice(int invoiceId)
         {
-            var invoice = _invoiceService.GetInvoice(invoiceId);
+            var invoice = invoiceService.GetInvoice(invoiceId);
             var model = new ReceiveInvoiceViewModel
             {
                 SelectedInvoice = AutoMapper.Mapper.Map<InvoiceModel>(invoice),
-                Locations = _locationService.GetLocations(3),
+                Locations = locationService.GetLocations(3),
             };
             return View("Invoice", model);
         }
@@ -83,9 +88,9 @@ namespace InventoryManagerWebsite.Controllers
             {
                 try
                 {
-                    if (product.ReceivedQuantity != _invoiceService.GetInvoiceProduct(product.Id).ReceivedQuantity)
+                    if (product.ReceivedQuantity != invoiceService.GetInvoiceProduct(product.Id).ReceivedQuantity)
                     {
-                        _transferService.ReceiveInvoiceProduct(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity);
+                        transferService.ReceiveInvoiceProduct(product.Id, model.SelectedInvoice.InvoiceType == "Purchase Order" ? 4 : 5, model.SelectedLocationId, product.ReceivedQuantity);
                         product.IsSynced = true;
                         product.SyncMessage = "Update saved successfully.";
                     }
@@ -108,7 +113,7 @@ namespace InventoryManagerWebsite.Controllers
             }
 
 
-            model.Locations = _locationService.GetLocations(3);
+            model.Locations = locationService.GetLocations(3);
             return View("Invoice", model);
         }
 
@@ -138,7 +143,7 @@ namespace InventoryManagerWebsite.Controllers
                 ModelState.AddModelError("CAUGHTERR-1", e.Message);
                 model.TransferComplete = false;
                 model.ItemsAtLocation =
-                    _inventoryService.GetLocationsWithProduct(model.SelectedInventoryId)
+                    productService.GetLocationsWithProduct(model.SelectedInventoryId)
                         .Where(x => x.LocationId == model.SelectedDepartureLocationId)
                         .ToList();
                 return View("Move", model);
@@ -152,9 +157,9 @@ namespace InventoryManagerWebsite.Controllers
         {
             try
             {
-                model.DestinationLocations = _locationService.GetLocations(1); //1: Internal
-                model.SourceLocations = _locationService.GetExternalLocations();
-                model.Products = _inventoryService.GetProductItems(string.Empty);
+                model.DestinationLocations = locationService.GetLocations(1); //1: Internal
+                model.SourceLocations = locationService.GetExternalLocations();
+                model.Products = productService.GetProductItems(string.Empty);
                 //model.TransferComplete = _transferService.TransferOut(model.SelectedProductId, 
                 //    model.SelectedSourceLocationId, model.SelectedDestinationLocationId, model.SelectedQuantity);
 
