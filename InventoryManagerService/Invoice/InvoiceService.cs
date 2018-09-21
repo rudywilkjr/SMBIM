@@ -54,9 +54,8 @@ namespace InventoryManagerService.Invoice
             {
                 if (purchaseOrderId <= 0) throw new ApplicationException("Invalid Purchase Order ID: " + purchaseOrderId);
                 if (productRepository.GetProduct(productId) == null) throw new ApplicationException("Invalid Product ID: " + productId);
-                if (productCost < 0) throw new ApplicationException("Invalid Product Cost. Cost must not be less than $0.00");
+                if (productCost < (decimal) 0.00) throw new ApplicationException("Invalid Product Cost. Cost must not be less than $0.00");
                 if (orderedQuantity <= 0) throw new ApplicationException("Invalid Order Quantity. Quantity must be greater than 0.");
-                if (orderedQuantity == 2) throw new ApplicationException("Test Message for 2 Qty.");
                 invoiceRepository.SaveNewPurchaseOrderProduct(purchaseOrderId, productId, productCost, orderedQuantity);
             }
             catch (Exception e)
