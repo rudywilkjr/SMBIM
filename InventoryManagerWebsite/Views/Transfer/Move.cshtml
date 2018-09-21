@@ -4,73 +4,71 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container" style="width: 800px; text-align: center">
-    <form id="transfer-move-form">
+<div class="container-fluid" style="text-align: center">
+    @using (Html.BeginForm("SendTransfer", "Transfer", FormMethod.Post))
+    {
         @Html.HiddenFor(x => x.SelectedArrivingLocationId)
         @Html.HiddenFor(x => x.SelectedDepartureLocationId)
         @Html.HiddenFor(x => x.SelectedInventoryId)
         <div class="row" style="font-size: x-large; font-weight: bold">
-            Transfers
-        </div>
-        @if (Model.TransferComplete.GetValueOrDefault())
-        {
-            <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px; background-color: lightgreen; margin-top: 25px;">
-                Transfer Completed Successfully
+            <div class="col-sm-12 subtitle">
+                Transfers
             </div>
-        }
-        <div class="row" style="font-size: x-large; font-weight: bold; margin-bottom: 25px">
-            @Html.ValidationSummary()
         </div>
         <div class="row" style="margin-top: 15px">
-            <div class="col-sm-4" style="text-align: right">
+            <div class="col-sm-5" style="text-align: right">
                 <table id="sourceTable" class="table">
                     <thead>
-                    <tr>
-                        <th colspan="3" style="text-align: center">Source</th>
-                    </tr>
+                        <tr>
+                            <th colspan="3" style="text-align: center">Source</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach (var i in Model.ItemsAtLocation)
-                    {
-                        <tr class="@(Model.SelectedDepartureLocationId == i.LocationId && Model.SelectedInventoryId == i.ProductId ? "selected-row" : "highlightable-row")" onclick="selectSourceLocation(this, @i.ProductId)">
-                            <td style="white-space: nowrap">@i.ProductName</td>
-                            <td style="text-align: left">@i.LocationDescription</td>
-                            <td style="white-space: nowrap">Qty: @i.QuantityOnHand</td>
-                        </tr>
-                    }
+                        @foreach (var i in Model.ItemsAtLocation)
+                        {
+                            <tr class="@(Model.SelectedDepartureLocationId == i.LocationId && Model.SelectedInventoryId == i.ProductId ? "selected-row" : "highlightable-row")" onclick="selectSourceLocation(this, @i.ProductId)">
+                                <td style="white-space: nowrap">@i.ProductName</td>
+                                <td style="text-align: left">@i.LocationDescription</td>
+                                <td style="white-space: nowrap">Qty: @i.QuantityOnHand</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
-            <div class="col-sm-4" style="text-align: center">
+            <div class="col-sm-2" style="text-align: center">
                 <div class="row">
-                    @Html.LabelFor(x => x.SelectedQuantity, "Qty:")
-                    @Html.TextBoxFor(x => x.SelectedQuantity, new Dictionary<string, object> {{"style", "width:50px;margin-bottom: 20px"}, {"onchange", "toggleTransferButtonState()" } })
+                    <div class="col-sm-12">
+                        @Html.LabelFor(x => x.SelectedQuantity, "Qty:")
+                        @Html.TextBoxFor(x => x.SelectedQuantity, new Dictionary<string, object> { { "style", "width:50px;margin-bottom: 20px" }, { "onchange", "toggleTransferButtonState()" } })
+                    </div>
                 </div>
                 <div class="row">
-                    <button id="Transfer" type="button" class="btn btn-primary disabled" style="margin-bottom: 20px" onclick="transferInventory()">Transfer To</button>
+                    <div class="col-sm-12">
+                        <button id="Transfer" type="button" class="btn btn-primary disabled" style="margin-bottom: 20px" onclick="transferInventory()">Transfer To</button>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <table id="destinationTable" class="table">
                     <thead>
-                    <tr>
-                        <th colspan="2" style="text-align: center">Destination</th>
-                    </tr>
+                        <tr>
+                            <th colspan="2" style="text-align: center">Destination</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach (var i in Model.Locations.Where(x => x.Id != Model.SelectedDepartureLocationId))
-                    {
-                        <tr class="@(Model.SelectedArrivingLocationId == i.Id ? "selected-row" : "highlightable-row")" onclick="selectDestinationLocation(this, @i.Id)">
-                            <td style="text-align: center">@i.Description</td>
-                        </tr>
-                    }
+                        @foreach (var i in Model.Locations.Where(x => x.Id != Model.SelectedDepartureLocationId))
+                        {
+                            <tr class="@(Model.SelectedArrivingLocationId == i.Id ? "selected-row" : "highlightable-row")" onclick="selectDestinationLocation(this, @i.Id)">
+                                <td style="text-align: center">@i.Description</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
-    </form>
+    }
 
-</div>
+    </div>
 
 @section Scripts
 {
