@@ -1,5 +1,5 @@
-﻿function CancelInventoryItem() {
-    window.open("/Product/", "_self");
+﻿function CancelProductItem() {
+    window.open("/Product/Lookup", "_self");
 }
 
 
